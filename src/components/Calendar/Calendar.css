@@ -1,0 +1,89 @@
+.calendar-page {
+    width: 50%;
+    height: 1000px;
+    padding: 20px;
+}
+
+.calendar-page h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.rbc-calendar {
+}
+
+.rbc-event {
+    background-color: #c09582; /* Zmieniony kolor tła wydarzeń */
+    color: #f1eada; /* Kolor tekstu wydarzeń */
+}
+
+/* Zmiana stylu nagłówka dni tygodnia */
+.rbc-header {
+    background-color: #f4f4f4; /* Kolor tła nagłówka */
+    color: #333; /* Kolor tekstu */
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Zmiana stylu komórek w kalendarzu */
+.rbc-day-bg {
+    border: 1px solid #ddd; /* Ramka komórek */
+    position: relative; /* Ustawienie relatywne, aby umieścić dni w rogu */
+}
+
+/* Ukrycie niepotrzebnych elementów (np. eventy Sample) */
+.rbc-event {
+    display: none;
+}
+
+/* Kwadratowe komórki */
+.rbc-day-bg {
+    height: 100px; /* Wysokość */
+    width: 100%; /* Pełna szerokość */
+    border: 1px solid #ddd;
+    box-sizing: border-box; /* Ustawia prawidłowe obramowanie */
+}
+
+/* Styl dzisiejszego dnia */
+.rbc-today {
+    background-color: #d5c9ae !important; /* Inny kolor dla dzisiejszego dnia */
+}
+
+/* Zmiana stylu dni tygodnia w lewym górnym rogu */
+.rbc-day-bg::before {
+    content: attr(data-day);
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 12px;
+    color: #555;
+}
+
+/* Styl numerków dni - usunięcie buttonów */
+.rbc-date-cell button {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: default;
+    padding: 0;
+}
+
+/* Usuń marginesy i paddingi między tygodniami */
+.rbc-month-row {
+    margin: 0;
+    padding: 0;
+}
+
+/* Usuń odstępy między tygodniami */
+.rbc-row-bg {
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+
+
+
