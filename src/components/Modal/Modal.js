@@ -27,8 +27,8 @@ const Modal = ({ content, open, handleClose}) => {
                 <div style={overlayStyle}>
                     <div style={modalStyle}>
                         {modalContent}
-                        <div style={actionStyle}>
-                            <button type="button" style={buttonStyle} onClick={handleClose}>Cancel</button>
+                        <div>
+                            <button className='form-button' onClick={handleClose}>Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -39,12 +39,6 @@ const Modal = ({ content, open, handleClose}) => {
 
 export default Modal;
 
-const buttonStyle = {
-    padding: '10px 20px',
-    fontSize: '16px',
-    margin: '10px',
-    cursor: 'pointer',
-};
 
 const overlayStyle = {
     position: 'fixed',
@@ -69,17 +63,3 @@ const modalStyle = {
     zIndex: 1001,
 };
 
-const inputStyle = {
-    width: '100%',
-    padding: '10px',
-    margin: '10px 0',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    fontSize: '16px',
-};
-
-const actionStyle = {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    marginTop: '20px',
-};

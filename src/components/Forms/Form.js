@@ -1,5 +1,4 @@
 import React from 'react';
-import "./Form.css"
 
 const Form = ({ fields, onSubmit, buttonText }) => {
     const handleSubmit = (event) => {
@@ -23,7 +22,7 @@ const Form = ({ fields, onSubmit, buttonText }) => {
                         />
                     </div>
                 ))}
-                <button className={"button"} type="submit">{buttonText}</button>
+                <button className={"form-button"} type="submit">{buttonText}</button>
             </form>
         </div>
     );

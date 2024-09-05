@@ -8,6 +8,8 @@ import MyToolbar from "./MyToolbar";
 
 const localizer = momentLocalizer(moment);
 
+
+
 const MyCalendar = () => {
     const [events, setEvents] = useState([
         // {
@@ -26,7 +28,7 @@ const MyCalendar = () => {
                 startAccessor="start"
                 endAccessor="end"
                 components={{
-                    event: MyEventComponent, toolbar: MyToolbar, // Własny pasek narzędzi
+                    event: MyEventComponent, toolbar: MyToolbar,
                 }}
             />
         </div>
