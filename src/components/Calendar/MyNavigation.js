@@ -1,9 +1,8 @@
 import React from 'react';
 
-const MyNavigation = ({ onNavigate, label}) => {
+const MyNavigation = ({ onNavigate }) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-            <span>{label}</span>
 
             <div>
                 <button onClick={() => onNavigate('PREV')}>Poprzedni</button>

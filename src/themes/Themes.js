@@ -32,13 +32,26 @@ const matchaLatte = {
     name: "MatchaLatte",
     colors: {
         1: "#4A5E49",
-        2: "#95A779",
+        5: "#95A779",
         3: "#E8E7D5",
         4: "#ADBA9D",
-        5: "#BD7C37",
+        2: "#BD7C37",
         6: "#273018",
     },
 };
+
+// const strawberryMilkshake = {
+//     id: "strawberryMilkshake",
+//     name: "StrawberryMilkshake",
+//     colors: {
+//         4: '#694D51',
+//         1: '#BA8298',
+//         3: '#efebe8',
+//         2: '#f1e6c5',
+//         5: '#8F3C51',
+//         6: '#311821',
+//     }
+// };
 
 // Function to create a theme with global styles for background gradient
 const createThemeWithGradient = (colors) => {
@@ -47,7 +60,7 @@ const createThemeWithGradient = (colors) => {
         styles: {
             global: {
                 body: {
-                    bgGradient: `radial(${colors[6]}, ${colors[1]}, ${colors[2]}, ${colors[3]})`,
+                    bgGradient: `radial(${colors[6]}, ${colors[1]}, ${colors[5]}, ${colors[3]})`,
                     minH: "100vh", // Ensure the body takes full height
                 },
             },
@@ -60,6 +73,8 @@ const defaultTheme = createThemeWithGradient(cinnamonRoll.colors); // Set defaul
 const cinnamonRollTheme = createThemeWithGradient(cinnamonRoll.colors);
 const frostelleTheme = createThemeWithGradient(frostelle.colors);
 const matchaLatteTheme = createThemeWithGradient(matchaLatte.colors);
+// const strawberryMilkshake = createThemeWithGradient(strawberryMilkshake.colors);
+
 
 // Export all themes
 const Themes = {
@@ -67,6 +82,7 @@ const Themes = {
     cinnamonRoll: cinnamonRollTheme,
     frostelle: frostelleTheme,
     matchaLatte: matchaLatteTheme,
+    // strawberryMilkshake: strawberryMilkshake,
 };
 
 export default Themes;

@@ -8,11 +8,8 @@ const UnauthorizedPage = () => {
     const context = useLocation().pathname === ('/auth/login'||'/') ? 'signIn' : 'signUp';
 
     return (
-                    <SimpleGrid bg="white" borderRadius="md" boxShadow="md" columns={{ sm: 1, md: 2 }} w="100%" height={500}>
-                        <Box>
-                            <Text font-size="3xl">
-                                testr
-                            </Text>
+                    <SimpleGrid bg="white" borderRadius="md" boxShadow="md" columns={{ sm: 1, md: 2 }} w="100%" height={500}  >
+                        <Box m={10}>
                             <AuthForm context={context}/>
                         </Box>
                     </SimpleGrid>

@@ -10,7 +10,8 @@ const Layout = ({ children }) => {
     const [activeColorTheme, setActiveColorTheme] = useState(cinnamonRoll);
     const [isAuthenticated, setIsAuthenticated] = useState(false); // Nowy stan dla uwierzytelnienia
 
-    const mergedTheme = extendTheme(baseTheme, { colors: activeColorTheme.colors });
+
+    // const mergedTheme = extendTheme(baseTheme, { colors: activeColorTheme.colors });
 
     useEffect(() => {
         // Sprawdzenie, czy jest token w localStorage
@@ -57,24 +58,24 @@ const Layout = ({ children }) => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
-        window.location.reload();  // Odświeżenie strony po wylogowaniu
+        window.location.href = '/auth/login';
     };
 
     return(
         <Box
-            bgGradient={`radial(${activeColorTheme.colors[6]}, ${activeColorTheme.colors[1]}, ${activeColorTheme.colors[2]}, ${activeColorTheme.colors[3]})`}
+            bgGradient={`radial(${activeColorTheme.colors[6]}, ${activeColorTheme.colors[1]}, ${activeColorTheme.colors[5]}, ${activeColorTheme.colors[3]})`}
             minH="100vh"
             padding="4"
         >
             <VStack spacing={8} >
-                <Box justifyContent="space-between" >
+                <Box justifyContent="space-between" w={"80%"}>
 
                     <Heading textAlign="center" as="h1" fontSize="4xl" color="white" m={5}>
                         Mocha Money
                     </Heading>
 
                     {/* Warunkowe renderowanie obrazów, jeśli użytkownik jest zalogowany */}
-                    {isAuthenticated && (
+                    {/*{isAuthenticated && (*/}
                         <>
                             <Image
                                 src="/gear.svg"
@@ -95,7 +96,7 @@ const Layout = ({ children }) => {
                                 right="10"
                             />
                         </>
-                    )}
+                    {/*)}*/}
 
                     {children}
                 </Box>
@@ -105,7 +106,7 @@ const Layout = ({ children }) => {
                 <Button onClick={switchToCinnamonRoll} colorScheme="brown">Cinnamon Roll</Button>
                 <Button onClick={switchToFrostelle} colorScheme="blue">Frostelle</Button>
                 <Button onClick={switchToMatchaLatte} colorScheme="green">Matcha</Button>
-                <Button onClick={switchToStrawberryMilkshake} colorScheme="pink">Strawberry Milkshake</Button>
+                {/*<Button onClick={switchToStrawberryMilkshake} colorScheme="pink">Strawberry Milkshake</Button>*/}
 
             </SimpleGrid>
         </Box>

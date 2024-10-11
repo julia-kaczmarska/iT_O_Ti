@@ -5,6 +5,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.css';
 import MyEventComponent from "./Records/MyEventComponent";
 import MyToolbar from "./MyToolbar";
+import MyNavigation from "./MyNavigation";
 
 const localizer = momentLocalizer(moment);
 
@@ -39,7 +40,6 @@ const MyCalendar = ({currentMonth}) => {
 
     return (
         <div className="calendar-page">
-            <h2> 's Calendar</h2>
             <Calendar
                 localizer={localizer}
                 events={events}
@@ -47,7 +47,7 @@ const MyCalendar = ({currentMonth}) => {
                 endAccessor="end"
                 date={currentMonth}
                 components={{
-                    event: MyEventComponent, toolbar: null
+                    event: MyEventComponent, toolbar: null, navigation: MyNavigation
                 }}
             />
         </div>

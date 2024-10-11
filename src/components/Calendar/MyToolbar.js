@@ -3,7 +3,6 @@ import React from 'react';
 const MyToolbar = ({ onNavigate, label, onView }) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-            <span>{label}</span>
 
             <div>
                 <button onClick={() => onNavigate('PREV')}>Poprzedni</button>

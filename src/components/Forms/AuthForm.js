@@ -1,8 +1,13 @@
 import React, {useState} from 'react';
 import Form from './Form';
 import {VStack} from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const AuthForm = ({ context }) => {
+
+    const [userId, setUserId] = useState(null);
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -60,7 +65,6 @@ const AuthForm = ({ context }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const url = context==="signIn" ? 'http://localhost:8080/auth/login' : 'http://localhost:8080/auth/registration';
-        // const method = 'POST';
 
         fetch(url, {
             method: 'POST',
@@ -76,9 +80,16 @@ const AuthForm = ({ context }) => {
                 return response.json();
             })
             .then(data => {
-                console.log('Logged in', data);
-                localStorage.setItem('token', data.token);
-                window.location.href = '/';  // Przekierowanie użytkownika po wylogowaniu
+                const token = data.token;
+                localStorage.setItem('jwtToken', token);
+
+                const decodedToken = jwtDecode(token);
+                const userId = decodedToken.sub;
+
+                console.log('User ID from token:', userId);
+
+                navigate(`/user/${userId}`);
+                console.log('Logged in', decodedToken);
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);

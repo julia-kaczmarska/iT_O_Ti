@@ -12,12 +12,22 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import {addMonths, format} from "date-fns";
+import {jwtDecode} from "jwt-decode";
+import Categories from "./Categories";
 
 const Dashboard = () => {
     const [open, setOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const [currentMonth, setCurrentMonth] = useState(new Date()); // Aktualny miesiąc
     const formattedMonth = format(currentMonth, 'MMMM yyyy');
+
+    const userName = () => {
+        const token = localStorage.getItem('jwtToken');
+
+        const decodedToken = jwtDecode(token);
+        const userName = decodedToken.name;
+        return userName;
+    }
 
     const openModal = (content) => {
         setModalContent(content);
@@ -37,7 +47,7 @@ const Dashboard = () => {
     };
 
     return (
-                <VStack>
+                <VStack >
 
                     {/* Sekcja nawigacji po miesiącach */}
                     <Box display="flex" justifyContent="space-between" alignItems="center" w="80%" bg="gray.100" p={4} borderRadius="md" boxShadow="md">
@@ -48,12 +58,12 @@ const Dashboard = () => {
 
                     <SimpleGrid bg="white" borderRadius="md" boxShadow="md" columns={{ sm: 1, md: 2 }} w="80%">
                         <Box m={3}>
-                            <Text fontSize="2xl" fontWeight="bold" mb={4}>Someone's budget</Text> {/* Placeholder, na razie */}
+                            <Text fontSize="2xl" fontWeight="bold" mb={4}> { userName } 's budget</Text> {/* Placeholder, na razie */}
                             <MyCalendar currentMonth={currentMonth} />
                         </Box>
                         <Box m={3}>
                             <Text fontSize="2xl" fontWeight="bold" mb={4}>This month budget</Text>
-                            <Budget userId={1} />
+                            <Categories />
                         </Box>
                     </SimpleGrid>
 

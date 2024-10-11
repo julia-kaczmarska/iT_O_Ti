@@ -39,21 +39,21 @@ function App() {
     return (
         <ChakraProvider theme={activeColorTheme}>
             <Layout>
-            <Router>
-                <Routes>
-                    <Route path="/auth/login" element={<UnauthorizedPage />} />
-                    <Route path="/auth/registration" element={<UnauthorizedPage />} />
-                    <Route path="/dashboard" element={<Dashboard onThemeChange={handleThemeChange} />} />
-                    <Route
-                        path="/"
-                        element={
-                            <PrivateRoute>
-                                <Dashboard onThemeChange={handleThemeChange} />
-                            </PrivateRoute>
-                        }
-                    />
-                </Routes>
-            </Router>
+                <Router>
+                    <Routes>
+                        <Route path="/auth/login" element={<UnauthorizedPage />} />
+                        <Route path="/auth/registration" element={<UnauthorizedPage />} />
+                        <Route path="/user/:userId" element={<Dashboard onThemeChange={handleThemeChange} />} />
+                        {/*<Route*/}
+                        {/*    path="/"*/}
+                        {/*    element={*/}
+                        {/*        <PrivateRoute>*/}
+                        {/*            <Dashboard onThemeChange={handleThemeChange} />*/}
+                        {/*        </PrivateRoute>*/}
+                        {/*    }*/}
+                        {/*/>*/}
+                    </Routes>
+                </Router>
             </Layout>
         </ChakraProvider>
     );

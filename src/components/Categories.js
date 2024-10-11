@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
-const Budget = ({ userId }) => {
+const Categories = () => {
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(null);
 
@@ -8,6 +9,15 @@ const Budget = ({ userId }) => {
         const fetchCategories = async () => {
             try {
                 const token = localStorage.getItem('jwtToken'); // Pobieranie tokena JWT z localStorage
+
+                if (!token) {
+                    throw new Error('No token found');
+                }
+
+                // Dekodowanie tokena JWT, aby uzyskać userId
+                const decodedToken = jwtDecode(token); // Upewnij się, że token jest prawidłowo dekodowany
+                const userId = decodedToken.sub; // Zakładam, że userId jest w polu 'sub'
+
                 const response = await fetch(`http://localhost:8080/user/${userId}/cats`, {
                     method: 'GET',
                     headers: {
@@ -17,7 +27,6 @@ const Budget = ({ userId }) => {
                 });
 
                 if (!response.ok) {
-                    // Wyświetl status i body w przypadku błędu
                     console.error(`HTTP error: ${response.status}`);
                     throw new Error('Failed to fetch categories');
                 }
@@ -31,22 +40,22 @@ const Budget = ({ userId }) => {
         };
 
         fetchCategories();
-    }, [userId]);
+    }, []); // Usunięcie zależności userId, ponieważ jest wyciągane z tokena
 
     if (error) {
         return <div>Error: {error}</div>;
     }
 
     return (
-            <div>
-                <h2>User Categories</h2>
-                <ul>
-                    {categories.map((category) => (
-                        <li key={category.categoryId}>{category.title}</li>
-                    ))}
-                </ul>
-            </div>
+        <div>
+            <h2>User Categories</h2>
+            <ul>
+                {categories.map((category) => (
+                    <li key={category.categoryId}>{category.title}</li>
+                ))}
+            </ul>
+        </div>
     );
 };
 
-export default Budget;
+export default Categories;

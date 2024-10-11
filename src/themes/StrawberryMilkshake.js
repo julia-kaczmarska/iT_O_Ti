@@ -1,7 +1,7 @@
 
 const strawberryMilkshake = {
-id: "cinnamonRoll",
-    name: "CinnamonRoll",
+id: "strawberryMilkshake",
+    name: "StrawberryMilkshake",
     colors: {
         4: '#694D51',
         1: '#BA8298',
@@ -9,7 +9,7 @@ id: "cinnamonRoll",
         2: '#f1e6c5',
         5: '#8F3C51',
         6: '#311821',
-}
+    }
 };
 
 
