@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import CategoryForm from "../Forms/CategoryForm";
+import CategoryForm from "./Forms/CategoryForm";
 
 const Modal = ({ content, open, handleClose}) => {
     const [modalContent, setModalContent] = useState(null);

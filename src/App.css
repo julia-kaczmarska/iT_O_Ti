@@ -1,51 +1,51 @@
 body {
-  background: #c4ac8d radial-gradient(#3d322c, #985f56, #ecd6cc);
+    background: #c4ac8d radial-gradient(#3d322c, #985f56, #ecd6cc);
 }
 
 .form-button {
-  background-color: #d3d3d3;
-  color: black;
+    background-color: #d3d3d3;
+    color: black;
 }
 
 .rbc-button-link {
-  box-shadow: none;
-  width: 100%;
+    box-shadow: none;
+    width: 100%;
 }
 
 .form-button:hover {
-  background-color: #f2d99a;
+    background-color: #f2d99a;
 }
 
 #header.alt .logo {
-  margin: 0 0 0 0;
-  height: 50px;
-  width: 50px;
+    margin: 0 0 0 0;
+    height: 50px;
+    width: 50px;
 }
 
 #header.alt {
-  height: 5vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  padding: 5em 5em 4em 5em;
+    height: 5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    padding: 5em 5em 4em 5em;
 }
 
 input {
-  background-color: rgba(134, 120, 120, 0.1);
-  box-shadow: none;
-  height: 2.75em;
-  appearance: none;
-  border-radius: 8px;
-  border: 1px solid #dddddd;
-  display: block;
-  outline: 0;
-  padding: 0 1em;
-  text-decoration: none;
-  width: 100%;
+    background-color: rgba(134, 120, 120, 0.1);
+    box-shadow: none;
+    height: 2.75em;
+    appearance: none;
+    border-radius: 8px;
+    border: 1px solid #dddddd;
+    display: block;
+    outline: 0;
+    padding: 0 1em;
+    text-decoration: none;
+    width: 100%;
 }
 
 ::placeholder {
-  color: #867878;
+    color: #867878;
 }

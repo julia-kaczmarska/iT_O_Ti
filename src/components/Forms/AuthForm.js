@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Form from './Form';
+import {VStack} from "@chakra-ui/react";
 
 const AuthForm = ({ context }) => {
 
@@ -77,6 +78,7 @@ const AuthForm = ({ context }) => {
             .then(data => {
                 console.log('Logged in', data);
                 localStorage.setItem('token', data.token);
+                window.location.href = '/';  // Przekierowanie użytkownika po wylogowaniu
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
@@ -84,13 +86,10 @@ const AuthForm = ({ context }) => {
     };
 
     return (
-        <div>
-            <p></p>
         <Form
             fields= {context==="signIn" ? logFields : regFields}
             onSubmit={handleSubmit}
             buttonText = {context==="signIn" ? "Sign In" : "Sign Up"} />
-        </div>
     );
 };
 
