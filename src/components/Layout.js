@@ -1,13 +1,21 @@
 import React, {useEffect, useState} from "react";
-import {baseTheme, Box, Button, extendTheme, Heading, Image, SimpleGrid, VStack} from "@chakra-ui/react";
-import cinnamonRoll from "../themes/CinnamonRoll";
-import Themes from "../themes/Themes";
-import frostelle from "../themes/Frostelle";
-import matchaLatte from "../themes/MatchaLatte";
-import strawberryMilkshake from "../themes/StrawberryMilkshake";
+import { Box, Heading, Image, useDisclosure, VStack} from "@chakra-ui/react";
+
+import {
+    Drawer,
+    DrawerBody,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerOverlay,
+    DrawerContent,
+    DrawerCloseButton,
+} from '@chakra-ui/react'
+import DrawerNavigation from "./DrawerNavigation";
+import {useThemeContext} from "../themes/ThemeContext";
 
 const Layout = ({ children }) => {
-    const [activeColorTheme, setActiveColorTheme] = useState(cinnamonRoll);
+    const { activeColorTheme } = useThemeContext(); // Pobierz aktywny motyw z kontekstu
+
     const [isAuthenticated, setIsAuthenticated] = useState(false); // Nowy stan dla uwierzytelnienia
 
 
@@ -15,15 +23,7 @@ const Layout = ({ children }) => {
 
     useEffect(() => {
         // Sprawdzenie, czy jest token w localStorage
-        const savedTheme = localStorage.getItem("theme");
         const token = localStorage.getItem('token');
-
-        if (savedTheme) {
-            const foundTheme = Themes[savedTheme];
-            if (foundTheme && foundTheme.id !== activeColorTheme.id) {
-                setActiveColorTheme(foundTheme);
-            }
-        }
 
         // Ustawienie stanu zalogowania na podstawie obecności tokenu
         if (token) {
@@ -33,37 +33,15 @@ const Layout = ({ children }) => {
         }
     }, []);  // Usuwamy activeColorTheme z zależności, aby uniknąć nieskończonej pętli
 
-    const handleThemeChange = (theme) => {
-        if (theme.id !== activeColorTheme.id) {
-            setActiveColorTheme(theme);
-            localStorage.setItem('theme', theme.id);
-        }
-    };
 
-    const switchToFrostelle = () => {
-        handleThemeChange(frostelle);
-    };
 
-    const switchToCinnamonRoll = () => {
-        handleThemeChange(cinnamonRoll);
-    };
+    const {isOpen, onOpen, onClose} = useDisclosure()
+    const btnRef = React.useRef()
 
-    const switchToMatchaLatte = () => {
-        handleThemeChange(matchaLatte);
-    };
-
-    const switchToStrawberryMilkshake = () => {
-        handleThemeChange(strawberryMilkshake);
-    };
-
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        window.location.href = '/auth/login';
-    };
 
     return(
         <Box
-            bgGradient={`radial(${activeColorTheme.colors[6]}, ${activeColorTheme.colors[1]}, ${activeColorTheme.colors[5]}, ${activeColorTheme.colors[3]})`}
+            bgGradient={`radial(${activeColorTheme.colors[6]}, ${activeColorTheme.colors[1]}, ${activeColorTheme.colors[5]}, ${activeColorTheme.colors[4]})`}
             minH="100vh"
             padding="4"
         >
@@ -78,37 +56,40 @@ const Layout = ({ children }) => {
                     {/*{isAuthenticated && (*/}
                         <>
                             <Image
-                                src="/gear.svg"
-                                alt="Gear"
+                                ref={btnRef}
+                                onClick={onOpen}
+                                cursor={"pointer"}
+                                _hover={{
+                                    opacity: "50%",
+                                }}
+                                color={"white"}
+                                opacity={"10%"}
+                                src="/arrow-down.svg"
+                                alt="Settings"
                                 boxSize="50px"
                                 position="absolute"
                                 top="5"
-                                right="100"
+                                right="5"
                             />
-                            <Image
-                                color={'red'}
-                                onClick={handleLogout}
-                                src="/door.svg"
-                                alt="Log out"
-                                boxSize="50px"
-                                position="absolute"
-                                top="5"
-                                right="10"
-                            />
+                            <Drawer
+                                isOpen={isOpen}
+                                placement='right'
+                                onClose={onClose}
+                                finalFocusRef={btnRef}
+                            >
+                                <DrawerOverlay />
+                                <DrawerContent>
+                                    <DrawerCloseButton />
+                                    <DrawerHeader>Settings</DrawerHeader>
+                                    <DrawerNavigation />
+                                </DrawerContent>
+                            </Drawer>
                         </>
                     {/*)}*/}
 
                     {children}
                 </Box>
             </VStack>
-
-            <SimpleGrid columns={2} spacing={10}>
-                <Button onClick={switchToCinnamonRoll} colorScheme="brown">Cinnamon Roll</Button>
-                <Button onClick={switchToFrostelle} colorScheme="blue">Frostelle</Button>
-                <Button onClick={switchToMatchaLatte} colorScheme="green">Matcha</Button>
-                {/*<Button onClick={switchToStrawberryMilkshake} colorScheme="pink">Strawberry Milkshake</Button>*/}
-
-            </SimpleGrid>
         </Box>
     );
 }

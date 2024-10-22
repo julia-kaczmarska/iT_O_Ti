@@ -1,38 +1,16 @@
 import React, {useState} from 'react';
 import Form from './Form';
-import {VStack} from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { Link, useNavigate } from "react-router-dom";
+import {jwtDecode} from "jwt-decode"; // Poprawny import
 
 const AuthForm = ({ context }) => {
-
-    const [userId, setUserId] = useState(null);
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [name, setName] = useState('')
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
 
-    const logFields = [
-        {
-            label: 'Email',
-            type: 'email',
-            name: 'email',
-            placeholder: 'Enter your email',
-            required: true,
-            onChange: (e) => setEmail(e.target.value), // Zaktualizuj stan przy każdej zmianie
-        },
-        {
-            label: 'Password',
-            type: 'password',
-            name: 'password',
-            placeholder: 'Enter your password',
-            required: true ,
-            onChange: (e) => setPassword(e.target.value), // Zaktualizuj stan przy każdej zmianie
-        },
-    ];
-
-    const regFields = [
+    const fields = [
         {
             label: 'Name',
             type: 'name',
@@ -60,11 +38,13 @@ const AuthForm = ({ context }) => {
         }
     ];
 
-    const formData = context==="signIn" ? {email,password} : {name,email,password};
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const url = context==="signIn" ? 'http://localhost:8080/auth/login' : 'http://localhost:8080/auth/registration';
+
+        const formData = context==="signIn" ? {email,password} : {name,email,password};
+
+        const url = context==="signIn" ? 'http://localhost:8080/auth/login' : 'http://localhost:8080/auth/register';
 
         fetch(url, {
             method: 'POST',
@@ -96,11 +76,19 @@ const AuthForm = ({ context }) => {
             });
     };
 
+    const link = context === "signIn" ? (
+        <Link to="/auth/register">Create an account</Link>
+    ) : (
+        <Link to="/auth/login">I have an account</Link>
+    );
+
     return (
         <Form
-            fields= {context==="signIn" ? logFields : regFields}
+            fields={context === "signIn" ? fields.slice(1, 3) : fields.slice(0, 3)}
             onSubmit={handleSubmit}
-            buttonText = {context==="signIn" ? "Sign In" : "Sign Up"} />
+            buttonText = {context==="signIn" ? "Sign In" : "Sign Up"}
+            link = {link}
+        />
     );
 };
 

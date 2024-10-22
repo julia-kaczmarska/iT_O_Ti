@@ -5,12 +5,31 @@
 }
 
 .rbc-today {
-    background-color: #dad4d0;
+    background-color: #eee5d4;
+}
+
+.rbc-off-range-bg {
+    background-color: #d3d2d1;
 }
 
 .rbc-date-cell {
     padding-right: 0;
     text-align: left;
+    cursor: default;
+
+}
+
+/* Zmiana kursora na default dla komórek dni w kalendarzu */
+.rbc-date-cell {
+    cursor: default; /* Zwykły wskaźnik */
+}
+
+.rbc-off-range {
+    cursor: default; /* Zwykły wskaźnik dla dni spoza bieżącego miesiąca */
+}
+
+.rbc-button-link {
+    cursor: default; /* Zwykły wskaźnik dla przycisków w dniu */
 }
 
 

@@ -1,25 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import CategoryForm from "./Forms/CategoryForm";
+import RecordForm from "./Forms/RecordForm";
 
-const Modal = ({ content, open, handleClose}) => {
+const Modal = ({ content, open, handleClose, onCategoryAdded }) => {
     const [modalContent, setModalContent] = useState(null);
 
     useEffect(() => {
         switch (content) {
             case 'Add category':
-                setModalContent(<CategoryForm isEdit={false} />);
+                setModalContent(
+                    <CategoryForm
+                        isEdit={false}
+                        onClose={handleClose}
+                        onCategoryAdded={onCategoryAdded}
+                    />
+                );
                 break;
             case 'Edit category':
-                setModalContent(<CategoryForm isEdit={true} />);
+                setModalContent(
+                    <CategoryForm
+                        isEdit={true}
+                        onClose={handleClose}
+                        onCategoryAdded={onCategoryAdded}
+                    />
+                );
                 break;
-            // Możesz dodać inne przypadki
+            case 'Add record':
+                setModalContent(
+                    <RecordForm
+                        isEdit={false}
+                        onClose={handleClose}
+                        onCategoryAdded={onCategoryAdded}
+                    />
+                );
+                break;
             default:
                 console.log(`Unknown content type: ${content}`);
                 break;
         }
-    }, [content]);
-
-
+    }, [content, handleClose, onCategoryAdded]);
 
     return (
         <div>
@@ -38,7 +57,6 @@ const Modal = ({ content, open, handleClose}) => {
 };
 
 export default Modal;
-
 
 const overlayStyle = {
     position: 'fixed',
@@ -62,4 +80,3 @@ const modalStyle = {
     maxWidth: '100%',
     zIndex: 1001,
 };
-

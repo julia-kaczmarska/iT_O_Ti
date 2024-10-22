@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import {
+    ListItem,
+    UnorderedList
+} from '@chakra-ui/react'
 
 const Categories = () => {
     const [categories, setCategories] = useState([]);
@@ -14,9 +18,7 @@ const Categories = () => {
                     throw new Error('No token found');
                 }
 
-                // Dekodowanie tokena JWT, aby uzyskać userId
-                const decodedToken = jwtDecode(token); // Upewnij się, że token jest prawidłowo dekodowany
-                const userId = decodedToken.sub; // Zakładam, że userId jest w polu 'sub'
+                const userId = jwtDecode(token).sub;
 
                 const response = await fetch(`http://localhost:8080/user/${userId}/cats`, {
                     method: 'GET',
@@ -47,14 +49,11 @@ const Categories = () => {
     }
 
     return (
-        <div>
-            <h2>User Categories</h2>
-            <ul>
+            <UnorderedList>
                 {categories.map((category) => (
-                    <li key={category.categoryId}>{category.title}</li>
+                    <ListItem key={category.categoryId}>{category.title}</ListItem>
                 ))}
-            </ul>
-        </div>
+            </UnorderedList>
     );
 };
 

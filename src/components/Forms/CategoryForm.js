@@ -1,27 +1,22 @@
 import React, { useState } from 'react';
 import Form from "./Form";
+import { jwtDecode } from "jwt-decode";
 
-const CategoryForm = ({ isEdit, category, userId }) => {
+const CategoryForm = ({ isEdit, category, onClose, onCategoryAdded }) => {
     const [title, setTitle] = useState(category ? category.title : '');
-
-    const fields = [
-        {
-            label: 'Category',
-            type: 'text',
-            name: 'title',
-            value: title,
-            placeholder: 'Enter category title',
-            required: true,
-            onChange: (e) => setTitle(e.target.value), // Zaktualizuj stan przy każdej zmianie
-        }
-    ];
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            throw new Error('No token found');
+        }
+
+        const userId = jwtDecode(token).sub;
         const newCategory = { title };
 
-        const url = isEdit ? `http://localhost:3000/user/1/editcat/${category.id}` : `http://localhost:8080/user/1/addcat`;
+        const url = isEdit ? `http://localhost:8080/user/${userId}/editcat/${category.id}` : `http://localhost:8080/user/${userId}/addcat`;
         const method = isEdit ? 'PUT' : 'POST';
 
         fetch(url, {
@@ -39,6 +34,8 @@ const CategoryForm = ({ isEdit, category, userId }) => {
             })
             .then(data => {
                 console.log(isEdit ? 'Category updated:' : 'Category added:', data);
+                onCategoryAdded(); // Wywołaj funkcję odświeżenia kategorii
+                onClose(); // Zamknij modal
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
@@ -50,8 +47,18 @@ const CategoryForm = ({ isEdit, category, userId }) => {
             <h2>{isEdit ? 'Edit category' : 'Add category'}</h2>
             <Form
                 label={isEdit ? 'Edit Category' : 'Add Category'}
-                fields={fields}
-                onSubmit={handleSubmit} // Zaktualizowano, aby obsługiwał submit
+                fields={[
+                    {
+                        label: 'Category',
+                        type: 'text',
+                        name: 'title',
+                        value: title,
+                        placeholder: 'Enter category title',
+                        required: true,
+                        onChange: (e) => setTitle(e.target.value),
+                    }
+                ]}
+                onSubmit={handleSubmit}
                 buttonText={isEdit ? 'Update' : 'Create'}
             />
         </div>
