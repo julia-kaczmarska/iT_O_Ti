@@ -1,4 +1,4 @@
-import {Text, SimpleGrid, Stack, Table, TableCaption, TableContainer, Thead} from "@chakra-ui/react";
+import {Text, SimpleGrid, Stack, Table, TableCaption, TableContainer, Thead, Th} from "@chakra-ui/react";
 
 const Budget = ({}) => {
 
@@ -11,8 +11,11 @@ const Budget = ({}) => {
                 </SimpleGrid>
                 <TableContainer>
                     <Table variant={'simple'}>
-                        <TableCaption> IDK </TableCaption>
-                        <Thead> mmm </Thead>
+                        <Thead>
+                            <Th>Category</Th>
+                            <Th>Budgeted</Th>
+                            <Th>Left</Th>
+                        </Thead>
                     </Table>
                 </TableContainer>
 

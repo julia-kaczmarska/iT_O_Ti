@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {Box, SimpleGrid, Heading, VStack, Text} from "@chakra-ui/react";
-import AuthForm from "./Forms/AuthForm";
+import AuthForm from "../Forms/AuthForm";
 import {useLocation} from "react-router-dom";
 
 const UnauthorizedPage = () => {

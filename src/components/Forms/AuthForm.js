@@ -64,7 +64,10 @@ const AuthForm = ({ context }) => {
                 localStorage.setItem('jwtToken', token);
 
                 const decodedToken = jwtDecode(token);
+                localStorage.setItem('name', decodedToken.name);
                 const userId = decodedToken.sub;
+                localStorage.setItem('userId', userId);
+
 
                 console.log('User ID from token:', userId);
 

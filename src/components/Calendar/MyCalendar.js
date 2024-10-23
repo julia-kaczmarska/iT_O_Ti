@@ -4,7 +4,6 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.css';
 import MyEventComponent from "./Records/MyEventComponent";
-import {jwtDecode} from "jwt-decode";
 
 const localizer = momentLocalizer(moment);
 

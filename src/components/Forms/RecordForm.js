@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Input, Select, Switch, VStack } from '@chakra-ui/react';
-import Categories from '../Categories';
+import Categories from '../Categories/Categories';
 import {jwtDecode} from "jwt-decode"; // Komponent do wyboru kategorii
 
 const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved }) => {
@@ -14,6 +14,8 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved }) => {
         const token = localStorage.getItem('jwtToken');
         if (!token) {
             throw new Error('No token found');
+            localStorage.clear();
+            window.location.href = '/auth/login';
         }
         const userId = jwtDecode(token).sub;
 
@@ -55,7 +57,6 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved }) => {
     return (
         <form onSubmit={handleSubmit}>
             <VStack spacing={4} align="stretch">
-                <h2>{isEdit ? 'Edit Record' : 'Add Record'}</h2>
                 <Input
                     type="number"
                     value={amount}
@@ -75,7 +76,7 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved }) => {
                     onChange={(e) => setRecordType(e.target.checked)}
                     id="recordType"
                 >
-                    {recordType ? 'Wydatek' : 'Przychód'}
+                    {recordType ? 'Expense' : 'Income'}
                 </Switch>
                 <Select
                     placeholder="Select Category"

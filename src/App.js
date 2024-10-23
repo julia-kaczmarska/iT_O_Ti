@@ -2,10 +2,12 @@ import { ChakraProvider } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
-import Dashboard from "./components/Dashboard";
-import UnauthorizedPage from "./components/UnauthorizedPage";
-import Layout from "./components/Layout";
+import Dashboard from "./components/pages/Dashboard";
+import UnauthorizedPage from "./components/pages/UnauthorizedPage";
+import Layout from "./components/pages/Layout";
 import {ThemeProvider, useThemeContext} from "./themes/ThemeContext";
+import Categories from "./components/Categories/Categories";
+import CategorySettings from "./components/Categories/CategorySettings";
 
 function App() {
 
@@ -32,9 +34,9 @@ function App() {
                     <Routes>
                         <Route path="/auth/login" element={<UnauthorizedPage />} />
                         <Route path="/auth/register" element={<UnauthorizedPage />} />
-                        <Route path="/user/:userId" element={<Dashboard />} />
-                        {/*<Route path="/" element={<PrivateRoute> <Dashboard /></PrivateRoute>}*/}
-                        />
+                        <Route path="/user/:userId" element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
+                        <Route path="/" element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
+                        <Route path="/user/:userId/categories" element={<PrivateRoute> <CategorySettings context = "categories" /></PrivateRoute>} />
                     </Routes>
                 </Router>
             </Layout>

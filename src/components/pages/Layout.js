@@ -11,7 +11,7 @@ import {
     DrawerCloseButton,
 } from '@chakra-ui/react'
 import DrawerNavigation from "./DrawerNavigation";
-import {useThemeContext} from "../themes/ThemeContext";
+import {useThemeContext} from "../../themes/ThemeContext";
 
 const Layout = ({ children }) => {
     const { activeColorTheme } = useThemeContext(); // Pobierz aktywny motyw z kontekstu
@@ -52,41 +52,35 @@ const Layout = ({ children }) => {
                         Mocha Money
                     </Heading>
 
-                    {/* Warunkowe renderowanie obrazów, jeśli użytkownik jest zalogowany */}
-                    {/*{isAuthenticated && (*/}
-                        <>
-                            <Image
-                                ref={btnRef}
-                                onClick={onOpen}
-                                cursor={"pointer"}
-                                _hover={{
-                                    opacity: "50%",
-                                }}
-                                color={"white"}
-                                opacity={"10%"}
-                                src="/arrow-down.svg"
-                                alt="Settings"
-                                boxSize="50px"
-                                position="absolute"
-                                top="5"
-                                right="5"
-                            />
-                            <Drawer
-                                isOpen={isOpen}
-                                placement='right'
-                                onClose={onClose}
-                                finalFocusRef={btnRef}
-                            >
-                                <DrawerOverlay />
-                                <DrawerContent>
-                                    <DrawerCloseButton />
-                                    <DrawerHeader>Settings</DrawerHeader>
-                                    <DrawerNavigation />
-                                </DrawerContent>
-                            </Drawer>
-                        </>
-                    {/*)}*/}
-
+                    <Image
+                        ref={btnRef}
+                        onClick={onOpen}
+                        cursor={"pointer"}
+                        _hover={{
+                            opacity: "50%",
+                        }}
+                        color={"white"}
+                        opacity={"10%"}
+                        src="/arrow-down.svg"
+                        alt="Settings"
+                        boxSize="50px"
+                        position="absolute"
+                        top="5"
+                        right="5"
+                    />
+                    <Drawer
+                        isOpen={isOpen}
+                        placement='right'
+                        onClose={onClose}
+                        finalFocusRef={btnRef}
+                    >
+                        <DrawerOverlay bg="rgba(0, 0, 0, 0)"/> {/*bez tego nie działa animacja zamykania drawera, więc jest ale go nie widzać :) */}
+                        <DrawerContent>
+                            <DrawerCloseButton />
+                            <DrawerHeader>Settings</DrawerHeader>
+                            <DrawerNavigation />
+                        </DrawerContent>
+                    </Drawer>
                     {children}
                 </Box>
             </VStack>

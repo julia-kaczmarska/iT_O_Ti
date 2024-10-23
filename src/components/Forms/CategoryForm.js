@@ -11,6 +11,8 @@ const CategoryForm = ({ isEdit, category, onClose, onCategoryAdded }) => {
         const token = localStorage.getItem('jwtToken');
         if (!token) {
             throw new Error('No token found');
+            localStorage.clear();
+            window.location.href = '/auth/login';
         }
 
         const userId = jwtDecode(token).sub;
@@ -44,9 +46,9 @@ const CategoryForm = ({ isEdit, category, onClose, onCategoryAdded }) => {
 
     return (
         <div>
-            <h2>{isEdit ? 'Edit category' : 'Add category'}</h2>
+            {/*<h2>{isEdit ? 'Edit category' : 'Add category'}</h2>*/}
             <Form
-                label={isEdit ? 'Edit Category' : 'Add Category'}
+                // label={isEdit ? 'Edit Category' : 'Add Category'}
                 fields={[
                     {
                         label: 'Category',
