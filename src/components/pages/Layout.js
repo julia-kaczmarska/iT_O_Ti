@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { Box, Heading, Image, useDisclosure, VStack} from "@chakra-ui/react";
+import {Box, Heading, Image, useDisclosure, VisuallyHidden, VStack} from "@chakra-ui/react";
 
 import {
     Drawer,
@@ -22,17 +22,17 @@ const Layout = ({ children }) => {
     // const mergedTheme = extendTheme(baseTheme, { colors: activeColorTheme.colors });
 
     useEffect(() => {
-        // Sprawdzenie, czy jest token w localStorage
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('jwtToken');
 
-        // Ustawienie stanu zalogowania na podstawie obecności tokenu
         if (token) {
             setIsAuthenticated(true);
         } else {
             setIsAuthenticated(false);
         }
-    }, []);  // Usuwamy activeColorTheme z zależności, aby uniknąć nieskończonej pętli
 
+        console.log(isAuthenticated);
+
+    }, []);
 
 
     const {isOpen, onOpen, onClose} = useDisclosure()
@@ -48,39 +48,43 @@ const Layout = ({ children }) => {
             <VStack spacing={8} >
                 <Box justifyContent="space-between" w={"80%"}>
 
-                    <Heading textAlign="center" as="h1" fontSize="4xl" color="white" m={5}>
+                    <Heading textAlign="center" as="h1" fontSize="4xl" color="white" m={5} >
                         Mocha Money
                     </Heading>
 
-                    <Image
-                        ref={btnRef}
-                        onClick={onOpen}
-                        cursor={"pointer"}
-                        _hover={{
-                            opacity: "50%",
-                        }}
-                        color={"white"}
-                        opacity={"10%"}
-                        src="/arrow-down.svg"
-                        alt="Settings"
-                        boxSize="50px"
-                        position="absolute"
-                        top="5"
-                        right="5"
-                    />
-                    <Drawer
-                        isOpen={isOpen}
-                        placement='right'
-                        onClose={onClose}
-                        finalFocusRef={btnRef}
-                    >
-                        <DrawerOverlay bg="rgba(0, 0, 0, 0)"/> {/*bez tego nie działa animacja zamykania drawera, więc jest ale go nie widzać :) */}
-                        <DrawerContent>
-                            <DrawerCloseButton />
-                            <DrawerHeader>Settings</DrawerHeader>
-                            <DrawerNavigation />
-                        </DrawerContent>
-                    </Drawer>
+                    {isAuthenticated && (
+                        <Box>
+                            <Image
+                                ref={btnRef}
+                                onClick={onOpen}
+                                cursor={"pointer"}
+                                _hover={{
+                                    opacity: "50%",
+                                }}
+                                color={"white"}
+                                opacity={"10%"}
+                                src="/arrow-down.svg"
+                                alt="Settings"
+                                boxSize="50px"
+                                position="absolute"
+                                top="5"
+                                right="5"
+                            />
+                            <Drawer
+                                isOpen={isOpen}
+                                placement='right'
+                                onClose={onClose}
+                                finalFocusRef={btnRef}
+                            >
+                                <DrawerOverlay bg="rgba(0, 0, 0, 0)"/> {/*bez tego nie działa animacja zamykania drawera, więc jest ale go nie widzać :) */}
+                                <DrawerContent>
+                                    <DrawerCloseButton />
+                                    <DrawerHeader>Settings</DrawerHeader>
+                                    <DrawerNavigation />
+                                </DrawerContent>
+                            </Drawer>
+                        </Box>
+                    )}
                     {children}
                 </Box>
             </VStack>

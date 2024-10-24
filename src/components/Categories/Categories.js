@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
-    Box, Input,
-    ListItem, Tooltip,
-    UnorderedList, useColorModeValue, useEditableControls
-} from '@chakra-ui/react'
+    Box, Input, Tooltip,
+    UnorderedList, useEditableControls, ButtonGroup, IconButton, Icon, Editable, ListItem, SimpleGrid, Flex
+} from '@chakra-ui/react';
 import {
-    EditablePreview,
-    IconButton,
-    ButtonGroup,
-    Editable,
-    EditableInput,
-} from '@chakra-ui/react'
-import { CheckIcon, CloseIcon } from '@chakra-ui/icons'
-import {useThemeContext} from "../../themes/ThemeContext";
-
+    EditablePreview, EditableInput
+} from '@chakra-ui/react';
+import {CheckIcon, CloseIcon } from '@chakra-ui/icons';
+import { useThemeContext } from "../../themes/ThemeContext";
 
 const Categories = () => {
-    const { activeColorTheme } = useThemeContext(); // Pobierz aktywny motyw z kontekstu
+    const { activeColorTheme } = useThemeContext();
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(null);
 
@@ -32,7 +26,7 @@ const Categories = () => {
 
                 const userId = localStorage.getItem('userId');
 
-                const response = await fetch(`http://localhost:8080/user/${userId}/cats`, {
+                const response = await fetch(`http://localhost:8080/user/${userId}/categories`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -56,9 +50,29 @@ const Categories = () => {
         fetchCategories();
     }, []);
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+    const handleUpdateCategory = async (categoryId, newTitle) => {
+        try {
+            const token = localStorage.getItem('jwtToken');
+            const userId = localStorage.getItem('userId');
+            const response = await fetch(`http://localhost:8080/user/${userId}/category/${categoryId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title: newTitle }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update category');
+            }
+
+            const updatedCategory = await response.json();
+            setCategories(categories.map(category => category.categoryId === categoryId ? updatedCategory : category));
+        } catch (error) {
+            console.error('Error updating category:', error);
+        }
+    };
 
     const EditableControls = () => {
         const {
@@ -66,47 +80,52 @@ const Categories = () => {
             getSubmitButtonProps,
             getCancelButtonProps,
             getEditButtonProps,
-        } = useEditableControls()
+        } = useEditableControls();
 
         return isEditing ? (
             <ButtonGroup justifyContent='end' size='sm' w='full' spacing={2} mt={2}>
                 <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
-                <IconButton
-                    icon={<CloseIcon boxSize={3} />}
-                    {...getCancelButtonProps()}
-                />
+                <IconButton icon={<CloseIcon boxSize={3} />} {...getCancelButtonProps()} />
             </ButtonGroup>
-        ) : null
+        ) : null;
+    };
+
+    if (error) {
+        return <div>Error: {error}</div>;
     }
 
     return (
-        <Box>
+        <Box mb = {3}>
             <UnorderedList>
-
                 {categories.map((category) => (
-                    <ListItem key={category.categoryId}>
+                    <Flex key={category.categoryId} columns={4} spacing={0} alignItems="center">
+                        <Icon viewBox='0 0 200 200' color={activeColorTheme.colors[2]} boxSize={4}>
+                            <path
+                                fill='currentColor'
+                                d='M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0'
+                            />
+                        </Icon>
                         <Editable
                             defaultValue={category.title}
                             isPreviewFocusable={true}
                             selectAllOnFocus={false}
-                        />
-                    </ListItem>
+                            onSubmit={(newTitle) => handleUpdateCategory(category.categoryId, newTitle)}
+                        >
+                            <Flex alignItems="center">
+                                <Tooltip label='Click to edit' shouldWrapChildren={true}>
+                                    <EditablePreview
+                                        py={1}
+                                        px={2}
+                                    />
+                                </Tooltip>
+                                <Input py={1} px={2} as={EditableInput} />
+                                <EditableControls />
+                            </Flex>
+                        </Editable>
+                    </Flex>
                 ))}
-
-                <Tooltip label='Click to edit' shouldWrapChildren={true}>
-                    <EditablePreview
-                        bg={activeColorTheme.colors[3]}
-                        py={2}
-                        px={4}
-                    />
-                </Tooltip>
-                <Input py={2} px={4} as={EditableInput} />
-                <EditableControls />
             </UnorderedList>
         </Box>
-
-
-
     );
 };
 

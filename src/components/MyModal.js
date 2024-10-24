@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import CategoryForm from "./Forms/CategoryForm";
 import RecordForm from "./Forms/RecordForm";
 import CategorySettings from "./Categories/CategorySettings";
+import Categories from "./Categories/Categories";
 
 const MyModal = ({ isOpen, onClose, content }) => {
     const [modalLabel, setModalLabel] = useState(null)
@@ -21,7 +22,7 @@ const MyModal = ({ isOpen, onClose, content }) => {
         switch (content) {
             case 'Category settings':
                 setModalContent(
-                    <CategorySettings/>
+                    <Categories />
                 );
                 break;
             case 'Add category':

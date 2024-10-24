@@ -18,7 +18,7 @@ const CategoryForm = ({ isEdit, category, onClose, onCategoryAdded }) => {
         const userId = jwtDecode(token).sub;
         const newCategory = { title };
 
-        const url = isEdit ? `http://localhost:8080/user/${userId}/editcat/${category.id}` : `http://localhost:8080/user/${userId}/addcat`;
+        const url = isEdit ? `http://localhost:8080/user/${userId}/editcategory/${category.id}` : `http://localhost:8080/user/${userId}/addcat`;
         const method = isEdit ? 'PUT' : 'POST';
 
         fetch(url, {
