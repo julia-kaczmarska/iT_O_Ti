@@ -5,14 +5,15 @@ import {
     ModalHeader,
     ModalFooter,
     ModalBody,
-    ModalCloseButton, Button, Box
+    ModalCloseButton, Button, Box, Grid
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CategoryForm from "./Forms/CategoryForm";
 import RecordForm from "./Forms/RecordForm";
 import CategorySettings from "./Categories/CategorySettings";
 import Categories from "./Categories/Categories";
 import OpenModalButton from "./MyButtons/OpenModalButton";
+import ColorPoints from "./Categories/ColorPoints";
 
 const MyModal = ({ isOpen, onClose, content }) => {
     const [modalLabel, setModalLabel] = useState(null)
@@ -24,8 +25,11 @@ const MyModal = ({ isOpen, onClose, content }) => {
             case 'Category settings':
                 setModalContent(
                     <Box>
-                    <CategorySettings />
-                    <OpenModalButton label={"Add category"}/>
+                        <Grid columns="repeat(2, 1fr)" gap={1}>
+                            <ColorPoints />
+                            <CategorySettings />
+                        </Grid>
+                        <OpenModalButton label={"Add category"}/>
                     </Box>
                 );
                 break;

@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import DrawerNavigation from "../pages/DrawerNavigation";
+// CategoriesContext.js
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const Categories = () => {
+const CategoriesContext = createContext(); // Stwórz kontekst bez redefiniowania
+
+export const useCategories = () => useContext(CategoriesContext);
+
+export const CategoriesProvider = ({ children }) => {
     const [categories, setCategories] = useState([]);
-
-    //////////////////////////////////////////////////
-    useEffect(() => {
-        console.log("Fetched categories:", categories);
-    }, [categories]);
-    //////////////////////////////////////////////////
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchCategories = async () => {
             try {
                 const token = localStorage.getItem('jwtToken');
                 const userId = localStorage.getItem('userId');
+                if (!token) {
+                    throw new Error('No token found');
+                }
+
                 const response = await fetch(`http://localhost:8080/user/${userId}/categories`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -23,9 +26,11 @@ const Categories = () => {
                 });
 
                 if (!response.ok) throw new Error('Failed to fetch categories');
+
                 const data = await response.json();
                 setCategories(data);
             } catch (error) {
+                setError(error.message);
                 console.error('Error fetching categories:', error);
             }
         };
@@ -34,12 +39,14 @@ const Categories = () => {
     }, []);
 
     const updateCategory = (updatedCategory) => {
-        setCategories(categories.map(cat =>
-            cat.categoryId === updatedCategory.categoryId ? updatedCategory : cat
+        setCategories(categories.map(category =>
+            category.categoryId === updatedCategory.categoryId ? updatedCategory : category
         ));
     };
 
-    return <DrawerNavigation categories={categories} updateCategory={updateCategory} />;
+    return (
+        <CategoriesContext.Provider value={{ categories, updateCategory, error }}>
+            {children}
+        </CategoriesContext.Provider>
+    );
 };
-
-export default Categories;

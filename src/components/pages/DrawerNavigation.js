@@ -4,18 +4,19 @@ import {
     Box,
     Button,
     DrawerBody,
-    DrawerFooter,
+    DrawerFooter, Grid,
     Stack,
     Text
 } from "@chakra-ui/react";
 import { other } from "../../themes/Themes";
 import { useThemeContext } from "../../themes/ThemeContext";
 import Categories from "../Categories/Categories";
-import React from "react";
+import React, {useEffect} from "react";
 import OpenModalButton from "../MyButtons/OpenModalButton";
 import CategorySettings from "../Categories/CategorySettings";
+import ColorPoints from "../Categories/ColorPoints";
 
-const DrawerNavigation = ({ } ) => {
+const DrawerNavigation = ({  }) => {
     const { activeColorTheme, switchTheme } = useThemeContext();
 
     const handleLogout = () => {
@@ -23,11 +24,6 @@ const DrawerNavigation = ({ } ) => {
         window.location.href = '/auth/login';
         console.log("token: " + localStorage.getItem('jwtToken'));
     };
-
-    const openCategorySettings = () => {
-        const userId = localStorage.getItem('userId');
-        window.location.href = `/user/${userId}/categories`
-    }
 
     return(
         <Box>
@@ -69,7 +65,10 @@ const DrawerNavigation = ({ } ) => {
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel pb={4}>
-                                <CategorySettings />
+                                <Grid columns="repeat(2, 1fr)" gap={1}>
+                                    <ColorPoints />
+                                    <CategorySettings />
+                                </Grid>
                                 <OpenModalButton label={"Category settings"} onClose={true}/>
                             </AccordionPanel>
                         </AccordionItem>
