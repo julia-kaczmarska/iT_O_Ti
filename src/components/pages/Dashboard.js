@@ -53,7 +53,6 @@ const Dashboard = ( { }) => {
 
 
             <OpenModalButton label = "Add category"/>
-            <OpenModalButton label = "Edit category"/>
             <OpenModalButton label = "Category settings"/>
             <OpenModalButton label = "Add record"/>
 

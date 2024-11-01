@@ -4,7 +4,6 @@ import React, {useState} from "react";
 
 const OpenModalButton = ({label}) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
-    // const [modalContent, setModalContent] = useState('');
 
 
     const openModal = () => {

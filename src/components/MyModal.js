@@ -5,13 +5,14 @@ import {
     ModalHeader,
     ModalFooter,
     ModalBody,
-    ModalCloseButton, Button
+    ModalCloseButton, Button, Box
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import CategoryForm from "./Forms/CategoryForm";
 import RecordForm from "./Forms/RecordForm";
 import CategorySettings from "./Categories/CategorySettings";
 import Categories from "./Categories/Categories";
+import OpenModalButton from "./MyButtons/OpenModalButton";
 
 const MyModal = ({ isOpen, onClose, content }) => {
     const [modalLabel, setModalLabel] = useState(null)
@@ -22,20 +23,16 @@ const MyModal = ({ isOpen, onClose, content }) => {
         switch (content) {
             case 'Category settings':
                 setModalContent(
-                    <Categories />
+                    <Box>
+                    <CategorySettings />
+                    <OpenModalButton label={"Add category"}/>
+                    </Box>
                 );
                 break;
             case 'Add category':
                 setModalContent(
                     <CategoryForm
                         isEdit={false}
-                    />
-                );
-                break;
-            case 'Edit category':
-                setModalContent(
-                    <CategoryForm
-                        isEdit={true}
                     />
                 );
                 break;

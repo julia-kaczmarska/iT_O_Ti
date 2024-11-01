@@ -13,8 +13,9 @@ import { useThemeContext } from "../../themes/ThemeContext";
 import Categories from "../Categories/Categories";
 import React from "react";
 import OpenModalButton from "../MyButtons/OpenModalButton";
+import CategorySettings from "../Categories/CategorySettings";
 
-const DrawerNavigation = ({onClose} ) => {
+const DrawerNavigation = ({ } ) => {
     const { activeColorTheme, switchTheme } = useThemeContext();
 
     const handleLogout = () => {
@@ -68,23 +69,24 @@ const DrawerNavigation = ({onClose} ) => {
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel pb={4}>
-                                <Categories />
+                                <CategorySettings />
                                 <OpenModalButton label={"Category settings"} onClose={true}/>
                             </AccordionPanel>
                         </AccordionItem>
                     </Accordion>
 
+
                 </Stack>
 
             </DrawerBody>
             <DrawerFooter>
-                        <Button
-                            bg={activeColorTheme.colors[5]}
-                            variant="solid"
-                            onClick={handleLogout}
-                        >
-                            Log out
-                        </Button>
+                <Button
+                    bg={activeColorTheme.colors[5]}
+                    variant="solid"
+                    onClick={handleLogout}
+                >
+                    Log out
+                </Button>
             </DrawerFooter>
         </Box>
     );

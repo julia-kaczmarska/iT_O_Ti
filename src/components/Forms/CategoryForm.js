@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Form from "./Form";
 import { jwtDecode } from "jwt-decode";
 
-const CategoryForm = ({ isEdit, category, onClose, onCategoryAdded }) => {
+const CategoryForm = ({ category, onClose, onCategoryAdded }) => {
     const [title, setTitle] = useState(category ? category.title : '');
+    const [color, setColor] = useState(category ? category.color : '');
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -15,15 +17,13 @@ const CategoryForm = ({ isEdit, category, onClose, onCategoryAdded }) => {
             window.location.href = '/auth/login';
         }
 
-        const userId = jwtDecode(token).sub;
-        const newCategory = { title };
+        const userId = localStorage.getItem("userId");
+        const newCategory = { title, color };
 
-        const url = isEdit ? `http://localhost:8080/user/${userId}/editcategory/${category.id}` : `http://localhost:8080/user/${userId}/addcat`;
-        const method = isEdit ? 'PUT' : 'POST';
-
-        fetch(url, {
-            method: method,
+        fetch(`http://localhost:8080/user/${userId}/addcategory`, {
+            method: 'POST',
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(newCategory),
@@ -35,9 +35,7 @@ const CategoryForm = ({ isEdit, category, onClose, onCategoryAdded }) => {
                 return response.json();
             })
             .then(data => {
-                console.log(isEdit ? 'Category updated:' : 'Category added:', data);
-                onCategoryAdded(); // Wywołaj funkcję odświeżenia kategorii
-                onClose(); // Zamknij modal
+                console.log('Category added:', data);
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
@@ -46,22 +44,29 @@ const CategoryForm = ({ isEdit, category, onClose, onCategoryAdded }) => {
 
     return (
         <div>
-            {/*<h2>{isEdit ? 'Edit category' : 'Add category'}</h2>*/}
             <Form
-                // label={isEdit ? 'Edit Category' : 'Add Category'}
                 fields={[
                     {
-                        label: 'Category',
+                        label: 'Title',
                         type: 'text',
                         name: 'title',
                         value: title,
                         placeholder: 'Enter category title',
                         required: true,
                         onChange: (e) => setTitle(e.target.value),
-                    }
-                ]}
+                    },
+                    {
+                        label: 'Color',
+                        type: 'text',
+                        name: 'color',
+                        value: color,
+                        placeholder: 'Enter category color',
+                        required: true,
+                        onChange: (e) => setColor(e.target.value),
+                    }]
+                }
                 onSubmit={handleSubmit}
-                buttonText={isEdit ? 'Update' : 'Create'}
+                buttonText={'Create'}
             />
         </div>
     );
