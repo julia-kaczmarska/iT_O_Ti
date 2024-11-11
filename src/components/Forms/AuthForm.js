@@ -13,7 +13,7 @@ const AuthForm = ({ context }) => {
     const fields = [
         {
             label: 'Name',
-            type: 'name',
+            type: 'text',
             name: 'name',
             placeholder: 'Your name',
             required: true,
@@ -21,7 +21,7 @@ const AuthForm = ({ context }) => {
         },
         {
             label: 'Email',
-            type: 'email',
+            type: 'text',
             name: 'email',
             placeholder: 'Enter your email',
             required: true,

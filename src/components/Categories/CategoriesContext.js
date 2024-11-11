@@ -1,7 +1,7 @@
 // CategoriesContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const CategoriesContext = createContext(); // Stwórz kontekst bez redefiniowania
+const CategoriesContext = createContext();
 
 export const useCategories = () => useContext(CategoriesContext);
 

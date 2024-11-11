@@ -10,7 +10,6 @@ import {
 } from "@chakra-ui/react";
 import { other } from "../../themes/Themes";
 import { useThemeContext } from "../../themes/ThemeContext";
-import Categories from "../Categories/Categories";
 import React, {useEffect} from "react";
 import OpenModalButton from "../MyButtons/OpenModalButton";
 import CategorySettings from "../Categories/CategorySettings";

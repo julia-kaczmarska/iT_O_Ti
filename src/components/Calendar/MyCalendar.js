@@ -1,64 +1,60 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.css';
 import MyEventComponent from "./Records/MyEventComponent";
+import {Box} from "@chakra-ui/react";
 
 const localizer = momentLocalizer(moment);
 
+const MyCalendar = ({ currentMonth }) => {
+    const [events, setEvents] = useState([]);
 
-const MyCalendar = ({currentMonth}) => {
-    const [events, setEvents] = useState([
-        {
-            title: 'Sample Event',
-            start: new Date(),
-            end: new Date(),
-        },
-    ]);
+    useEffect(() => {
+        const fetchEventsForMonth = async () => {
+            try {
+                const token = localStorage.getItem('jwtToken');
+                const userId = localStorage.getItem('userId');
+                const response = await fetch(`http://localhost:8080/user/${userId}/records`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await response.json();
 
-    // useEffect(() => {
-    //
-    //     const fetchEventsForMonth = async () => {
-    //         try {
-    //             const startOfMonth = moment(currentMonth).startOf('month').format('YYYY-MM-DD');
-    //             const endOfMonth = moment(currentMonth).endOf('month').format('YYYY-MM-DD');
-    //
-    //             // Zakładam, że masz API, które zwraca wydarzenia w podanym zakresie dat
-    //             const response = await fetch(`/user/${userId}/events?start=${startOfMonth}&end=${endOfMonth}`);
-    //             const data = await response.json();
-    //
-    //             // Aktualizujemy stan wydarzeń
-    //             setEvents(data);
-    //         } catch (error) {
-    //             console.error('Error fetching events:', error);
-    //         }
-    //     };
-    //
-    //     fetchEventsForMonth();
-    // }, [currentMonth]);
+                // Konwertujemy start i end na Date
+                const formattedEvents = data.map(event => ({
+                    ...event,
+                    start: moment(event.startDate, "YYYY-MM-DD").toDate(),
+                    end: moment(event.startDate, "YYYY-MM-DD").toDate()     //obejście endDate
+                }));
+                setEvents(formattedEvents);
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
+        };
+
+        fetchEventsForMonth();
+    }, [currentMonth]);
 
     return (
-        <div className="calendar-page">
+        <Box className="calendar-page">
             <Calendar
                 localizer={localizer}
-                // events={events}
+                events={events}
                 startAccessor="start"
                 endAccessor="end"
-                date={currentMonth}
-                onSelectEvent={() => {}}
-                onSelectSlot={() => {}}
-                selectable={false}
-                onDrillDown={() => {}} // Ignoruje kliknięcie na dzień
-
+                date={new Date(currentMonth)}
                 components={{
                     event: MyEventComponent,
-                    toolbar: () => null, // Hide toolbar
-
+                    toolbar: () => null, // Ukrycie paska narzędzi
                 }}
             />
-        </div>
+        </Box>
     );
 };
 
-export default (MyCalendar);
+export default MyCalendar;

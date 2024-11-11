@@ -1,56 +1,25 @@
 import React, {useEffect, useState} from 'react';
-import {jwtDecode} from "jwt-decode";
+import {Badge, Box, Text} from "@chakra-ui/react";
 
-const MyEventComponent = ({ event }) => {
-
-    const [records, setRecords] = useState([]);
-    const [error, setError] = useState(null);
+const MyEventComponent = ({ category, event }) => {
+    const [catColor, setCatColor] = useState("");
 
     useEffect(() => {
-        const fetchRecords = async () => {
-            try {
-                const jwtToken = localStorage.getItem('jwtToken');
-
-                if (!jwtToken) {
-                    throw new Error('No jwtToken found');
-                }
-
-                const userId = jwtDecode(jwtToken).sub;
-
-                const response = await fetch(`http://localhost:8080/user/${userId}/records`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${jwtToken}`, // Dodanie nagłówka autoryzacyjnego
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (!response.ok) {
-                    console.error(`HTTP error: ${response.status}`);
-                    throw new Error('Failed to fetch records');
-                }
-
-                const data = await response.json();
-                setRecords(data);
-            } catch (error) {
-                setError(error.message);
-                console.error('Error fetching records:', error);
-            }
-        };
-
-        fetchRecords();
-    }, []);
-
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+        if (category && category.categoryId === event.categoryId) {
+            setCatColor(category.color);
+        } else {
+            setCatColor(""); // Resetuje kolor, jeśli kategoria się nie zgadza
+        }
+    }, [category, event]); // Dodano `event` do zależności, aby reagować na zmiany w `event`
 
     return (
-        <div>
-            <strong>{event.title}</strong>
-            {event.desc && <div style={{ fontSize: 'smaller' }}>{event.desc}</div>}
-        </div>
+        <Box backgroundColor={catColor}>
+            <Text fontSize="xs">
+                {event.desc}
+                -{event.amount}
+            </Text>
+        </Box>
     );
-};
+}
 
 export default MyEventComponent;

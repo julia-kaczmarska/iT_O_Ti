@@ -11,7 +11,6 @@ import React, { useEffect, useState } from 'react';
 import CategoryForm from "./Forms/CategoryForm";
 import RecordForm from "./Forms/RecordForm";
 import CategorySettings from "./Categories/CategorySettings";
-import Categories from "./Categories/Categories";
 import OpenModalButton from "./MyButtons/OpenModalButton";
 import ColorPoints from "./Categories/ColorPoints";
 
@@ -44,6 +43,9 @@ const MyModal = ({ isOpen, onClose, content }) => {
                 setModalContent(
                     <RecordForm
                         isEdit={false}
+                        // existingRecord={existingRecord}
+                        // onClose={handleClose} // Funkcja zamykająca okno lub wykonująca inną akcję
+                        // onRecordSaved={handleRecordSaved} // Funkcja wywoływana po zapisaniu rekordu
                     />
                 );
                 break;

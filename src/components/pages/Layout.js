@@ -19,9 +19,6 @@ const Layout = ({ children }) => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false); // Nowy stan dla uwierzytelnienia
 
-
-    // const mergedTheme = extendTheme(baseTheme, { colors: activeColorTheme.colors });
-
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
 
@@ -35,20 +32,17 @@ const Layout = ({ children }) => {
 
     }, []);
 
-
     const {isOpen, onOpen, onClose} = useDisclosure()
     const btnRef = React.useRef()
 
-
     return(
-        <CategoriesProvider>
             <Box
                 bgGradient={`radial(${activeColorTheme.colors[6]}, ${activeColorTheme.colors[1]}, ${activeColorTheme.colors[5]}, ${activeColorTheme.colors[4]})`}
                 minH="100vh"
                 padding="4"
             >
                 <VStack spacing={8} >
-                    <Box justifyContent="space-between" w={"80%"}>
+                    <Box justifyContent="space-between" w={"90%"}>
 
                         <Heading textAlign="center" as="h1" fontSize="4xl" color="white" m={5} >
                             Mocha Money
@@ -91,7 +85,6 @@ const Layout = ({ children }) => {
                     </Box>
                 </VStack>
             </Box>
-        </CategoriesProvider>
     );
 }
 
