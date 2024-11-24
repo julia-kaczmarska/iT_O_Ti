@@ -1,18 +1,16 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import Dashboard from "./components/pages/Dashboard";
 import UnauthorizedPage from "./components/pages/UnauthorizedPage";
 import Layout from "./components/pages/Layout";
-import {ThemeProvider, useThemeContext} from "./themes/ThemeContext";
-import {CategoriesProvider} from "./components/Categories/CategoriesContext";
-// import Categories from "./components/Categories/Categories";
-// import CategorySettings from "./components/Categories/CategorySettings";
+import {ThemeProvider} from "./themes/ThemeContext";
+import {CategoriesProvider} from "./contexts/CategoriesContext";
+import AppThemeProvider from "./themes/AppThemeProvider";
 
 function App() {
 
-    const { activeColorTheme } = useThemeContext(); // Pobierz aktywny motyw z kontekstu
 
     function useAuth() {
         const isAuthenticated = Boolean(localStorage.getItem("jwtToken"));
@@ -27,22 +25,22 @@ function App() {
         return children;
     }
 
-
     return (
-        <ChakraProvider theme={activeColorTheme}>
-            <CategoriesProvider>
-                <Layout>
-                    <Router>
-                        <Routes>
-                            <Route path="/auth/login" element={<UnauthorizedPage />} />
-                            <Route path="/auth/register" element={<UnauthorizedPage />} />
-                            <Route path="/user/:userId" element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
-                            <Route path="/" element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
-                            {/*<Route path="/user/:userId/categories" element={<PrivateRoute> <CategorySettings context = "categories" /></PrivateRoute>} />*/}
-                        </Routes>
-                    </Router>
-                </Layout>
-            </CategoriesProvider>
+        <ChakraProvider>
+            <AppThemeProvider>
+                <CategoriesProvider>
+                    <Layout>
+                        <Router>
+                            <Routes>
+                                <Route path="/auth/login" element={<UnauthorizedPage />} />
+                                <Route path="/auth/register" element={<UnauthorizedPage />} />
+                                <Route path="/user/:userId" element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
+                                <Route path="/" element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
+                            </Routes>
+                        </Router>
+                    </Layout>
+                </CategoriesProvider>
+            </AppThemeProvider>
         </ChakraProvider>
     );
 }

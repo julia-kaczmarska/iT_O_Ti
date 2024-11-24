@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import DrawerNavigation from "./DrawerNavigation";
 import {useThemeContext} from "../../themes/ThemeContext";
-import { CategoriesProvider } from '../Categories/CategoriesContext';
+import { CategoriesProvider } from '../../contexts/CategoriesContext';
 
 const Layout = ({ children }) => {
     const { activeColorTheme } = useThemeContext(); // Pobierz aktywny motyw z kontekstu
@@ -37,14 +37,15 @@ const Layout = ({ children }) => {
 
     return(
             <Box
-                bgGradient={`radial(${activeColorTheme.colors[6]}, ${activeColorTheme.colors[1]}, ${activeColorTheme.colors[5]}, ${activeColorTheme.colors[4]})`}
+
+                bgGradient={`radial(${activeColorTheme.colors[5]}, ${activeColorTheme.colors[2]}, ${activeColorTheme.colors[3]}, ${activeColorTheme.colors[1]})`}
                 minH="100vh"
                 padding="4"
             >
                 <VStack spacing={8} >
                     <Box justifyContent="space-between" w={"90%"}>
 
-                        <Heading textAlign="center" as="h1" fontSize="4xl" color="white" m={5} >
+                        <Heading textAlign="center" fontSize="5xl" fontFamily='italic' color={activeColorTheme.colors[1]} m={5} >
                             Mocha Money
                         </Heading>
 
@@ -57,7 +58,6 @@ const Layout = ({ children }) => {
                                     _hover={{
                                         opacity: "50%",
                                     }}
-                                    color={"white"}
                                     opacity={"10%"}
                                     src="/arrow-down.svg"
                                     alt="Settings"

@@ -8,7 +8,7 @@ import {
     useEditableControls,
     ButtonGroup, IconButton
 } from '@chakra-ui/react';
-import { useCategories } from './CategoriesContext';
+import { useCategories } from '../../contexts/CategoriesContext';
 import {CheckIcon, CloseIcon} from "@chakra-ui/icons";
 
 const CategorySettings = ({ category }) => {

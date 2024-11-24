@@ -24,15 +24,15 @@ const Dashboard = ( { }) => {
 
     return (
         <VStack>
-            <Box display="flex" justifyContent="space-between" alignItems="center" w="100%" bg={activeColorTheme.colors[3]}
+            <Box display="flex" justifyContent="space-between" alignItems="center" w="100%" bg={activeColorTheme.colors[1]}
                  p={4} borderRadius="md" boxShadow="md">
-                <Button onClick={handlePrevMonth} bg={activeColorTheme.colors[1]}>&lt;</Button>
+                <Button onClick={handlePrevMonth} bg={activeColorTheme.colors[3]}>&lt;</Button>
                 <Heading as="h2" size="lg" color={activeColorTheme.colors[6]}>{formattedMonth}</Heading>
-                <Button onClick={handleNextMonth} bg={activeColorTheme.colors[1]}>&gt;</Button>
+                <Button onClick={handleNextMonth} bg={activeColorTheme.colors[3]}>&gt;</Button>
             </Box>
 
-            <SimpleGrid bg="white" borderRadius="md" boxShadow="md" columns={{ sm: 1, md: 2 }} w="100%">
-                <Box m={3}>
+            <SimpleGrid bg="white" borderRadius="md" boxShadow="md" columns={{ sm: 1, md: 2 }} w="100%" sx={{'--chakra-colors-chakra-border-color': activeColorTheme.colors[2]}}>
+                <Box m={3} sx={{'--chakra-colors-chakra-border-color': activeColorTheme.colors[2]}}>
                     <Text fontSize="2xl" fontWeight="bold" mb={4}>{userName}'s budget</Text>
                     <MyCalendar currentMonth={currentMonth} />
                 </Box>
@@ -44,7 +44,7 @@ const Dashboard = ( { }) => {
 
             <OpenModalButton label = "Add category"/>
             <OpenModalButton label = "Category settings"/>
-            <OpenModalButton label = "Add record"/>
+            {/*<Buttons label = "Add record"/>*/}
 
 
 

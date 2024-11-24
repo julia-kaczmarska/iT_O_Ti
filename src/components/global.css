@@ -1,0 +1,28 @@
+/* Ukrycie trójkątnego wskaźnika w ChromePicker */
+.w-color-swatch.w-color-github.w-color-chrome div[style*="border-width: 0px 8px 8px"],
+.w-color-swatch.w-color-github.w-color-chrome div[style*="border-width: 0px 7px 7px"] {
+    display: none !important;
+}
+
+/* Globalna zmiana rozmiaru strzałki Popover */
+.chakra-popover__popper {
+    --popper-arrow-size: 16px; /* Ustaw dowolny rozmiar */
+}
+
+/* Ustawienie strzałki Popover nad cieniem */
+.chakra-popover__arrow-positioner {
+    z-index: 1 !important; /* Wyższy z-index dla kontenera strzałki */
+}
+
+/*Szare elementy na niebiałym tle - zmiana na color[5] */
+/*.chakra-accordion.css-0 {*/
+/*    border-color: activeColorTheme.colors[5];*/
+/*}*/
+
+
+
+
+
+
+
+

@@ -1,27 +1,24 @@
 import {Box, Button, useDisclosure} from "@chakra-ui/react";
 import MyModal from "../MyModal";
 import React, {useState} from "react";
+import {useThemeContext} from "../../themes/ThemeContext";
+import Buttons from "./Buttons";
 
-const OpenModalButton = ({label}) => {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+ const OpenModalButton = ({label, placeholderDate}) => {
+     const { isOpen, onOpen, onClose } = useDisclosure()
 
-
-    const openModal = () => {
-        onOpen();
+     const openModal = () => {
+         onOpen();
     };
-
 
     return(
         <Box>
-            <Button onClick={() => openModal()}>
-                {label}
-            </Button>
-            <MyModal isOpen={isOpen} onClose={onClose} content={label}/>
+            <Buttons onClick={() => openModal()} label={label}/>
+            <MyModal isOpen={isOpen} onClose={onClose} content={label} placeholderDate={placeholderDate}/>
         </Box>
 );
 
 }
-
-export default OpenModalButton;
+export default OpenModalButton
 
 

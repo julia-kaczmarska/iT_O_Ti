@@ -11,15 +11,16 @@ import React, { useEffect, useState } from 'react';
 import CategoryForm from "./Forms/CategoryForm";
 import RecordForm from "./Forms/RecordForm";
 import CategorySettings from "./Categories/CategorySettings";
-import OpenModalButton from "./MyButtons/OpenModalButton";
 import ColorPoints from "./Categories/ColorPoints";
+import OpenModalButton from "./MyButtons/OpenModalButton";
+import Buttons from "./MyButtons/Buttons";
 
-const MyModal = ({ isOpen, onClose, content }) => {
-    const [modalLabel, setModalLabel] = useState(null)
+const MyModal = ({ isOpen, onClose, content, placeholderDate}) => {
+    const [modalLabel, setModalLabel] = useState(content ? content : null)
     const [modalContent, setModalContent] = useState(null);
 
     useEffect(() => {
-        setModalLabel(content)
+        // setModalLabel(content)
         switch (content) {
             case 'Category settings':
                 setModalContent(
@@ -28,7 +29,7 @@ const MyModal = ({ isOpen, onClose, content }) => {
                             <ColorPoints />
                             <CategorySettings />
                         </Grid>
-                        <OpenModalButton label={"Add category"}/>
+                        <Buttons label={"Add category"}/>
                     </Box>
                 );
                 break;
@@ -39,12 +40,14 @@ const MyModal = ({ isOpen, onClose, content }) => {
                     />
                 );
                 break;
-            case 'Add record':
+            case '+':
+                setModalLabel('Add record')
                 setModalContent(
                     <RecordForm
                         isEdit={false}
+                        placeholderDate={placeholderDate}
                         // existingRecord={existingRecord}
-                        // onClose={handleClose} // Funkcja zamykająca okno lub wykonująca inną akcję
+                        // onClose={handleClose} // Funkcja zamykająca okno
                         // onRecordSaved={handleRecordSaved} // Funkcja wywoływana po zapisaniu rekordu
                     />
                 );
@@ -64,13 +67,6 @@ const MyModal = ({ isOpen, onClose, content }) => {
                 <ModalBody>
                     {modalContent}
                 </ModalBody>
-
-                {/*<ModalFooter>*/}
-                {/*    /!*<Button colorScheme='blue' mr={3} onClick={onClose}>*!/*/}
-                {/*    /!*    Close*!/*/}
-                {/*    /!*</Button>*!/*/}
-                {/*    /!*<Button variant='ghost'>Secondary Action</Button>*!/*/}
-                {/*</ModalFooter>*/}
             </ModalContent>
         </Modal>
     );

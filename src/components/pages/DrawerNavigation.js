@@ -8,12 +8,13 @@ import {
     Stack,
     Text
 } from "@chakra-ui/react";
-import { other } from "../../themes/Themes";
+import {cinnamonRoll, frostelle, matchaLatte, other, strawberryMilkshake} from "../../themes/Themes";
 import { useThemeContext } from "../../themes/ThemeContext";
 import React, {useEffect} from "react";
 import OpenModalButton from "../MyButtons/OpenModalButton";
 import CategorySettings from "../Categories/CategorySettings";
 import ColorPoints from "../Categories/ColorPoints";
+import Buttons from "../MyButtons/Buttons";
 
 const DrawerNavigation = ({  }) => {
     const { activeColorTheme, switchTheme } = useThemeContext();
@@ -28,7 +29,7 @@ const DrawerNavigation = ({  }) => {
         <Box>
             <DrawerBody >
                 <Stack >
-                    <Accordion allowMultiple>
+                    <Accordion allowMultiple sx={{'--chakra-colors-chakra-border-color': activeColorTheme.colors[2]}}>
                         <AccordionItem>
                             <h2>
                                 <AccordionButton>
@@ -39,16 +40,16 @@ const DrawerNavigation = ({  }) => {
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel pb={4} textAlign={"center"}>
-                                <Button m={1} w = {'100%'} onClick={() => switchTheme('cinnamonRoll')} bg={other.colors.brown} opacity={'100%'} _hover={{opacity: '80%'}}>
+                                <Button m={1} w = {'100%'} onClick={() => switchTheme('cinnamonRoll')} bg={cinnamonRoll.colors[3]} color={cinnamonRoll.colors[1]} opacity={'100%'} _hover={{opacity: '80%'}}>
                                     Cinnamon Roll
                                 </Button>
-                                <Button m={1} w = {'100%'} onClick={() => switchTheme('frostelle')} bg={other.colors.blue} opacity={'100%'} _hover={{opacity: '80%'}}>
+                                <Button m={1} w = {'100%'} onClick={() => switchTheme('frostelle')} bg={frostelle.colors[2]} color={frostelle.colors[1]} opacity={'100%'} _hover={{opacity: '80%'}}>
                                     Frostelle
                                 </Button>
-                                <Button m={1} w = {'100%'} onClick={() => switchTheme('matchaLatte')} bg={other.colors.green} opacity={'100%'} _hover={{opacity: '80%'}}>
+                                <Button m={1} w = {'100%'} onClick={() => switchTheme('matchaLatte')} bg={matchaLatte.colors[3]} color={matchaLatte.colors[1]} opacity={'100%'} _hover={{opacity: '80%'}}>
                                     Matcha Latte
                                 </Button>
-                                <Button m={1} w = {'100%'} onClick={() => switchTheme('strawberryMilkshake')} bg={other.colors.pink} opacity={'100%'} _hover={{opacity: '80%'}}>
+                                <Button m={1} w = {'100%'} onClick={() => switchTheme('strawberryMilkshake')} bg={strawberryMilkshake.colors[3]} color={strawberryMilkshake.colors[1]} opacity={'100%'} _hover={{opacity: '80%'}}>
                                     Strawberry Milkshake
                                 </Button>
                             </AccordionPanel>
@@ -68,7 +69,7 @@ const DrawerNavigation = ({  }) => {
                                     <ColorPoints />
                                     <CategorySettings />
                                 </Grid>
-                                <OpenModalButton label={"Category settings"} onClose={true}/>
+                                <OpenModalButton label='Add category' onClose={true}/>
                             </AccordionPanel>
                         </AccordionItem>
                     </Accordion>
@@ -78,13 +79,11 @@ const DrawerNavigation = ({  }) => {
 
             </DrawerBody>
             <DrawerFooter>
-                <Button
-                    bg={activeColorTheme.colors[5]}
-                    variant="solid"
+                <Buttons
+                    type='secondary'
                     onClick={handleLogout}
-                >
-                    Log out
-                </Button>
+                    label='Log out'
+                />
             </DrawerFooter>
         </Box>
     );

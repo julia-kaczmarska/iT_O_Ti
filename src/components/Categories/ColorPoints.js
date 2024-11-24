@@ -5,7 +5,7 @@ import {
     Icon,
     Box, Popover, PopoverTrigger, PopoverContent, PopoverArrow,
 } from '@chakra-ui/react';
-import { useCategories } from './CategoriesContext';
+import { useCategories } from '../../contexts/CategoriesContext';
 import CategorySettings from './CategorySettings';
 import ChromePicker from "./ChromePicker";
 

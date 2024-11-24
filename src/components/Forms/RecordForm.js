@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import Form from "./Form";
-import {useCategories} from "../Categories/CategoriesContext";
+import {useCategories} from "../../contexts/CategoriesContext";
 
-const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved }) => {
+const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved, placeholderDate }) => {
     const { categories, error } = useCategories();
     const [amount, setAmount] = useState(existingRecord ? existingRecord.amount : '');
     const [desc, setDesc] = useState(existingRecord ? existingRecord.desc : '');
-    const [startDate, setStartDate] = useState(existingRecord ? existingRecord.startDate : '');
     const [recordType, setRecordType] = useState(existingRecord ? existingRecord.recordType : true);
     const [selectedCategory, setSelectedCategory] = useState(existingRecord ? existingRecord.category : '');
-    const userId = localStorage.getItem("userId");
 
+    const [startDate, setStartDate] = useState(existingRecord ? existingRecord.startDate : null);
 
+    const [selectedDate, setSelectedDate] = useState(
+        placeholderDate ? placeholderDate.toISOString().split('T')[0] : ''
+    )
 
     const fields = [
         {
@@ -34,15 +36,16 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved }) => {
             label: 'Date',
             type: 'date',
             name: 'date',
-            placeholder: 'Choose the date',
+            value : startDate ? startDate : selectedDate,
             required: true,
             onChange: (e) => setStartDate(e.target.value),
         },
         {
-            label: '',
+            label: 'Expense?',
             type: 'switch',
             name: 'choice',
-            placeholder: 'Choose the cashflow type',
+            // placeholder: 'Choose the cashflow type',
+            // defaultValue: true,
             onChange: (e) => setStartDate(e.target.value),
         },
         {
@@ -58,9 +61,13 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved }) => {
             })),
         },
     ]
+    console.log('Selected date:', selectedDate);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+
         const token = localStorage.getItem('jwtToken');
         const userId = localStorage.getItem('userId');
 

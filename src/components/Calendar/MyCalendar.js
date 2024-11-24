@@ -5,11 +5,14 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.css';
 import MyEventComponent from "./Records/MyEventComponent";
 import {Box} from "@chakra-ui/react";
+import DateCellWrapper from "./Records/DateCellWrapper";
+import {useThemeContext} from "../../themes/ThemeContext";
 
 const localizer = momentLocalizer(moment);
 
 const MyCalendar = ({ currentMonth }) => {
     const [events, setEvents] = useState([]);
+    const { activeColorTheme } = useThemeContext();
 
     useEffect(() => {
         const fetchEventsForMonth = async () => {
@@ -41,7 +44,7 @@ const MyCalendar = ({ currentMonth }) => {
     }, [currentMonth]);
 
     return (
-        <Box className="calendar-page">
+        <Box className="calendar-page" sx={{'--chakra-colors-chakra-border-color': activeColorTheme.colors[2]}}>
             <Calendar
                 localizer={localizer}
                 events={events}
@@ -51,6 +54,7 @@ const MyCalendar = ({ currentMonth }) => {
                 components={{
                     event: MyEventComponent,
                     toolbar: () => null, // Ukrycie paska narzędzi
+                    dateCellWrapper: DateCellWrapper,
                 }}
             />
         </Box>
