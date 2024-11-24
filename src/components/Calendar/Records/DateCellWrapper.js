@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import OpenModalButton from "../../MyButtons/OpenModalButton";
+import moment from "moment";
 
 const DateCellWrapper = ({ children, value }) => {
     const [hovered, setHovered] = useState(false);
+
+    console.log("Value received in DateCellWrapper:", value);
+
+    // Wymuszenie lokalnej daty
+    const localDate = new Date(value);
+
+    console.log("Local date interpreted:", localDate);
 
     return (
         <Box
@@ -37,11 +45,12 @@ const DateCellWrapper = ({ children, value }) => {
                     zIndex="10"
                     onMouseEnter={() => setHovered(true)}
                 >
-                    <OpenModalButton label="+" type='secondary' placeholderDate={value}/>
+                    <OpenModalButton label="+" type="secondary" placeholderDate={localDate} />
                 </Box>
             )}
         </Box>
     );
 };
+
 
 export default DateCellWrapper;

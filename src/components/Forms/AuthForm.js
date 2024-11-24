@@ -71,7 +71,7 @@ const AuthForm = ({ context }) => {
 
                 console.log('User ID from token:', userId);
 
-                navigate(`/user/${userId}`);
+                window.location.href = `/user/${userId}`;
                 console.log('Logged in', decodedToken);
             })
             .catch(error => {

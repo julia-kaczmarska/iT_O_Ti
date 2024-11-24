@@ -1,91 +1,65 @@
 import React, { useState } from 'react';
-import Form from "./Form";
 import {useCategories} from "../../contexts/CategoriesContext";
+import {Button, FormControl, Grid, GridItem, Input, NumberInput, NumberInputField, Select} from "@chakra-ui/react";
+import Buttons from "../MyButtons/Buttons";
+import moment from "moment";
 
 const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved, placeholderDate }) => {
     const { categories, error } = useCategories();
     const [amount, setAmount] = useState(existingRecord ? existingRecord.amount : '');
     const [desc, setDesc] = useState(existingRecord ? existingRecord.desc : '');
     const [recordType, setRecordType] = useState(existingRecord ? existingRecord.recordType : true);
-    const [selectedCategory, setSelectedCategory] = useState(existingRecord ? existingRecord.category : '');
+    const [selectedCategory, setSelectedCategory] = useState(existingRecord ? existingRecord.category : null);
 
-    const [startDate, setStartDate] = useState(existingRecord ? existingRecord.startDate : null);
+    const [startDate, setStartDate] = useState(
+        existingRecord ? existingRecord.startDate : placeholderDate ? moment(placeholderDate).format('YYYY-MM-DD') : ''
+    );
 
     const [selectedDate, setSelectedDate] = useState(
-        placeholderDate ? placeholderDate.toISOString().split('T')[0] : ''
-    )
+        placeholderDate ? moment(placeholderDate).format('YYYY-MM-DD') : ''
+    );
 
-    const fields = [
-        {
-            label: 'Amount',
-            type: 'text',
-            name: 'amount',
-            placeholder: 'Amount',
-            required: true,
-            onChange: (e) => setAmount(e.target.value),
-        },
-        {
-            label: 'Description',
-            type: 'text',
-            name: 'desc',
-            placeholder: 'Your cashflow record descritpion',
-            required: true,
-            onChange: (e) => setDesc(e.target.value),
-        },
-        {
-            label: 'Date',
-            type: 'date',
-            name: 'date',
-            value : startDate ? startDate : selectedDate,
-            required: true,
-            onChange: (e) => setStartDate(e.target.value),
-        },
-        {
-            label: 'Expense?',
-            type: 'switch',
-            name: 'choice',
-            // placeholder: 'Choose the cashflow type',
-            // defaultValue: true,
-            onChange: (e) => setStartDate(e.target.value),
-        },
-        {
-            label: 'Choose the cashflow category',
-            type: 'select',
-            name: 'Category',
-            placeholder: '',
-            required: true,
-            onChange: (e) => setSelectedCategory(e.target.value),
-            options: categories.map((category) => ({
-                label: category.title,
-                value: category.categoryId
-            })),
-        },
-    ]
+
+
     console.log('Selected date:', selectedDate);
+
+    const handleRecordTypeChange = (type) => {
+        setRecordType(type);
+    };
+
+    const format = (val) => `$` + val
+    const parse = (val) => val.replace(/^\$/, '')
+
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-
         const token = localStorage.getItem('jwtToken');
         const userId = localStorage.getItem('userId');
 
-        // Upewnij się, że startDate jest ustawione
-        if (!startDate) {
+        // Upewnij się, że `startDate` lub `selectedDate` jest poprawnie ustawione
+        const finalStartDate = startDate || selectedDate;
+
+        if (!finalStartDate) {
             console.error("Start date is missing");
             return;
         }
 
+        const adjustedStartDate = moment(finalStartDate, 'YYYY-MM-DD')
+            .set({ hour: 12, minute: 0, second: 0 })
+            .toISOString();
+
         const newRecord = {
             amount: parseFloat(amount),
-            startDate,
+            startDate: adjustedStartDate, // Przekazujemy jako ISO string z "neutralnym" czasem
             recordType: recordType ? true : false,
             desc,
             categoryId: parseInt(selectedCategory),
         };
 
-        console.log("Wysyłane dane:", newRecord); // Debug
+
+        console.log("Wysyłane dane:", newRecord);
 
         fetch(`http://localhost:8080/user/${userId}/addrecords`, {
             method: 'POST',
@@ -112,11 +86,70 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved, placeholde
 
 
     return (
-        <Form onSubmit={handleSubmit}
-              fields={fields}
-              buttonText={isEdit ? "Update" : "Add"}>
-        </Form>
-    );
+        <form onSubmit={handleSubmit}>
+            <FormControl onSubmit={handleSubmit}>
+                <Grid
+                    m={3}
+                    templateColumns="auto auto 1fr"
+                    gap={4}
+                    alignItems="center"
+                >
+                    <GridItem>
+                        <Button onClick={() => handleRecordTypeChange(0)} bg="#ffffff">+</Button>
+                    </GridItem>
+                    <GridItem>
+                        <Button onClick={() => handleRecordTypeChange(1)} bg="#ffffff">-</Button>
+                    </GridItem>
+                    <GridItem>
+                        <NumberInput
+                            borderColor="#ffffff"
+                            precision={2}
+                            value={amount}
+                            max={999999}
+                            placeholder="Cashflow amount"
+                            onChange={(valueAsString, valueAsNumber) => setAmount(valueAsNumber)}
+                        >
+                            <NumberInputField />
+                        </NumberInput>
+                    </GridItem>
+                </Grid>
+
+                <Input
+                    borderColor='#ffffff'
+                    m={3}
+                    label= 'Description'
+                    placeholder= 'Your cashflow description :)'
+                    required ={true}
+                    onChange = {(e) => setDesc(e.target.value)}
+                />
+                <Input
+                    borderColor='#ffffff'
+                    m={3}
+                    type="date"
+                    value={startDate ? startDate : selectedDate}
+                    required={true}
+                    onChange={(e) => setStartDate(e.target.value)}
+                />
+                <Select
+                    borderColor='#ffffff'
+                    m={3}
+                    label= 'Choose the cashflow category'
+                    required={true}
+                    // value={field.value}
+                    placeholder='Choose a category'
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                    {categories.map((category) => (
+                        <option key={category.categoryId} value={category.categoryId}>
+                            {category.title}
+                        </option>
+                    ))}
+                </Select>
+            </FormControl>
+        <Buttons label='Confirm' onClick={handleSubmit}/>
+        </form>
+
+);
 };
 
 export default RecordForm;

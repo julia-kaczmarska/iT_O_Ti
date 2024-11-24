@@ -31,9 +31,10 @@ const MyCalendar = ({ currentMonth }) => {
                 // Konwertujemy start i end na Date
                 const formattedEvents = data.map(event => ({
                     ...event,
-                    start: moment(event.startDate, "YYYY-MM-DD").toDate(),
-                    end: moment(event.startDate, "YYYY-MM-DD").toDate()     //obejście endDate
+                    start: moment.utc(event.startDate).local().toDate(), // Konwersja z UTC na lokalny czas
+                    end: moment.utc(event.startDate).local().toDate()    // To samo dla `end`
                 }));
+
                 setEvents(formattedEvents);
             } catch (error) {
                 console.error('Error fetching events:', error);
@@ -51,6 +52,7 @@ const MyCalendar = ({ currentMonth }) => {
                 startAccessor="start"
                 endAccessor="end"
                 date={new Date(currentMonth)}
+                getNow={() => new Date()} // Użycie bieżącego czasu lokalnego
                 components={{
                     event: MyEventComponent,
                     toolbar: () => null, // Ukrycie paska narzędzi

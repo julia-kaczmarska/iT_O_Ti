@@ -15,9 +15,9 @@ import {useThemeContext} from "../../themes/ThemeContext";
 import { CategoriesProvider } from '../../contexts/CategoriesContext';
 
 const Layout = ({ children }) => {
-    const { activeColorTheme } = useThemeContext(); // Pobierz aktywny motyw z kontekstu
+    const { activeColorTheme } = useThemeContext();
 
-    const [isAuthenticated, setIsAuthenticated] = useState(false); // Nowy stan dla uwierzytelnienia
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
@@ -27,9 +27,6 @@ const Layout = ({ children }) => {
         } else {
             setIsAuthenticated(false);
         }
-
-        console.log(isAuthenticated);
-
     }, []);
 
     const {isOpen, onOpen, onClose} = useDisclosure()
