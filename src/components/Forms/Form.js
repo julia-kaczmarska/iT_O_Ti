@@ -18,10 +18,6 @@ const Form = ({ fields, onSubmit, buttonText, link }) => {
     const { activeColorTheme } = useThemeContext();
     const [value, setValue] = useState(0);
 
-
-    const format = (val) => `$` + val
-    const parse = (val) => val.replace(/^\$/, '')
-
     const handleSubmit = (e) => {
         e.preventDefault();
         onSubmit(e);
@@ -55,9 +51,8 @@ const Form = ({ fields, onSubmit, buttonText, link }) => {
                         )}
                         {field.type === 'number' && (
                             <NumberInput
-                                precision={2}
-                                onChange={(valueString) => setValue(parse(valueString))}
-                                value={format(field.value)}
+                                onChange={(valueString) => setValue(valueString)}
+                                value={field.value}
                                 max={999999}
                             >
                                 <NumberInputField
@@ -68,15 +63,6 @@ const Form = ({ fields, onSubmit, buttonText, link }) => {
                                 />
                             </NumberInput>
                         )}
-                        {/*{field.type === 'date' && (*/}
-                        {/*    <Input*/}
-                        {/*        type="date"*/}
-                        {/*        name={field.name}*/}
-                        {/*        value={field.value}*/}
-                        {/*        placeholder={field.placeholder}*/}
-                        {/*        onChange={field.onChange}*/}
-                        {/*    />*/}
-                        {/*)}*/}
                         {field.type === 'switch' && (
                             <Switch
                                 isChecked={field.value}
@@ -86,20 +72,6 @@ const Form = ({ fields, onSubmit, buttonText, link }) => {
                                 {field.placeholder}
                             </Switch>
                         )}
-                        {/*{field.type === 'select' && (*/}
-                        {/*    <Select*/}
-                        {/*        name={field.name}*/}
-                        {/*        value={field.value}*/}
-                        {/*        placeholder='Choose a category'*/}
-                        {/*        onChange={field.onChange}*/}
-                        {/*    >*/}
-                        {/*        {field.options.map((option) => (*/}
-                        {/*            <option key={option.value} value={option.value}>*/}
-                        {/*                {option.label}*/}
-                        {/*            </option>*/}
-                        {/*        ))}*/}
-                        {/*    </Select>*/}
-                        {/*)}*/}
                     </FormControl>
                 ))}
                 <SimpleGrid columns={{ sm: 1, md: 2 }}>

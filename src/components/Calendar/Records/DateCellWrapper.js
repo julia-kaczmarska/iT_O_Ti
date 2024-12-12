@@ -36,13 +36,13 @@ const DateCellWrapper = ({ children, value }) => {
             {/* Cała komórka kalendarza */}
             {children}
 
-            {/* Przyciski wyświetlane na hover */}
+             {/*Przyciski wyświetlane na hover*/}
             {hovered && (
                 <Box
                     position="absolute"
                     top="5px"
                     right="5px"
-                    zIndex="10"
+                    zIndex="2"
                     onMouseEnter={() => setHovered(true)}
                 >
                     <OpenModalButton label="+" type="secondary" placeholderDate={localDate} />

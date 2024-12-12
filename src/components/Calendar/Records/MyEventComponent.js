@@ -10,12 +10,25 @@ import {
     Text
 } from "@chakra-ui/react";
 import {useCategories} from "../../../contexts/CategoriesContext";
+import MyModal from "../../MyButtons/MyModal";
 
 
 
 const MyEventComponent = ({ event }) => {
     const { categories } = useCategories();
     const [catColor, setCatColor] = useState('');
+    const [isModalOpen, setModalOpen] = useState(false); // Stan otwarcia modala
+    const [modalContent, setModalContent] = useState(null); // Zawartość modala
+
+    const openModal = (content) => {
+        setModalContent(content);
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+        setModalContent(null);
+    };
 
     useEffect(() => {
 
@@ -31,6 +44,7 @@ const MyEventComponent = ({ event }) => {
     }, [categories, event]);
 
     return (
+        <Box>
         <Popover>
             <PopoverTrigger>
                 <div
@@ -59,13 +73,23 @@ const MyEventComponent = ({ event }) => {
                 _focus={{
                     boxShadow: 'none', // Usuwa focus z PopoverContent
                 }}
-                >
+                onClick={() => openModal('Category settings')} // Otwiera modal z zawartością "Category settings"
+            >
                 <PopoverArrow bg={catColor}/>
                 <PopoverBody>
                     {event.desc} - {event.amount}
                 </PopoverBody>
             </PopoverContent>
         </Popover>
+
+    <MyModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        content={modalContent}
+        placeholderDate={new Date()} // Przekazanie przykładowej daty
+    />
+
+    </Box>
 
     );
 }

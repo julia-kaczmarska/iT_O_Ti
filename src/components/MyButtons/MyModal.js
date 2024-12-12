@@ -8,12 +8,12 @@ import {
     ModalCloseButton, Button, Box, Grid
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react';
-import CategoryForm from "./Forms/CategoryForm";
-import RecordForm from "./Forms/RecordForm";
-import CategorySettings from "./Categories/CategorySettings";
-import ColorPoints from "./Categories/ColorPoints";
-import OpenModalButton from "./MyButtons/OpenModalButton";
-import Buttons from "./MyButtons/Buttons";
+import CategoryForm from "../Forms/CategoryForm";
+import RecordForm from "../Forms/RecordForm";
+import CategorySettings from "../Categories/CategorySettings";
+import ColorPoints from "../Categories/ColorPoints";
+import OpenModalButton from "./OpenModalButton";
+import Buttons from "./Buttons";
 
 const MyModal = ({ isOpen, onClose, content, placeholderDate}) => {
     const [modalLabel, setModalLabel] = useState(content ? content : null)

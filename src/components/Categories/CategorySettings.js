@@ -1,23 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Editable,
     EditableInput,
     EditablePreview,
     Tooltip,
-    Box,
-    useEditableControls,
-    ButtonGroup, IconButton
+    Flex,
+    IconButton,
+    VStack, useEditableControls,
 } from '@chakra-ui/react';
+import { CheckIcon, CloseIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useCategories } from '../../contexts/CategoriesContext';
-import {CheckIcon, CloseIcon} from "@chakra-ui/icons";
+import MyAlertDialog from '../MyButtons/MyAlertDialog';
 
 const CategorySettings = ({ category }) => {
-    const { updateCategory } = useCategories();
+    const { updateCategory, deleteCategory } = useCategories();
+    const [isDialogOpen, setDialogOpen] = useState(false); // Dodajemy stan dialogu
 
-    // Zabezpieczenie przed nieprawidłowym category
+    const handleDeleteCategory = () => {
+        deleteCategory(category.categoryId);
+        setDialogOpen(false); // Zamknięcie dialogu po usunięciu
+    };
+
     if (!category) {
         return null;
     }
+
     const EditableControls = () => {
         const {
             isEditing,
@@ -26,11 +33,26 @@ const CategorySettings = ({ category }) => {
         } = useEditableControls();
 
         return isEditing ? (
-            <ButtonGroup justifyContent='end' size='sm' w='full' spacing={2} mt={2}>
-                <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
-                <IconButton icon={<CloseIcon boxSize={3} />} {...getCancelButtonProps()} />
-                {/*przycisk usuwający kategorię?*/}
-            </ButtonGroup>
+            <Flex justifyContent="flex-end" gap={2} mt={2}>
+                <IconButton
+                    aria-label="Confirm edit"
+                    icon={<CheckIcon />}
+                    size="sm"
+                    {...getSubmitButtonProps()}
+                />
+                <IconButton
+                    aria-label="Cancel edit"
+                    icon={<CloseIcon />}
+                    size="sm"
+                    {...getCancelButtonProps()}
+                />
+                <IconButton
+                    aria-label="Delete category"
+                    icon={<DeleteIcon />}
+                    size="sm"
+                    onMouseDown={() => setDialogOpen(true)} // Otwieranie dialogu
+                />
+            </Flex>
         ) : null;
     };
 
@@ -51,25 +73,50 @@ const CategorySettings = ({ category }) => {
                 body: JSON.stringify({ title: newTitle }),
             });
         } catch (error) {
-            console.error("Error updating title in database:", error);
+            console.error('Error updating title in database:', error);
         }
     };
 
     return (
-        <Box>
+        <VStack align="start" spacing={2}>
             <Editable
                 defaultValue={category.title}
                 isPreviewFocusable={true}
                 onSubmit={handleUpdateTitle}
             >
                 <Tooltip label="Click to edit title" shouldWrapChildren={true}>
-                    <EditablePreview py={1} px={2} />
+                    <EditablePreview
+                        py={2}
+                        px={4}
+                        border="1px solid"
+                        borderColor="gray.300"
+                        borderRadius="md"
+                        minH="40px"
+                        display="flex"
+                        alignItems="center"
+                    />
                 </Tooltip>
-                <EditableInput py={1} px={2} />
+                <EditableInput
+                    py={2}
+                    px={4}
+                    border="1px solid"
+                    borderColor="blue.300"
+                    borderRadius="md"
+                    minH="40px"
+                    display="flex"
+                    alignItems="center"
+                />
                 <EditableControls />
-
             </Editable>
-        </Box>
+
+            <MyAlertDialog
+                isOpen={isDialogOpen} // Przekazanie stanu otwarcia dialogu
+                onClose={() => setDialogOpen(false)} // Funkcja zamykająca dialog
+                onConfirm={handleDeleteCategory} // Funkcja potwierdzająca usunięcie
+                title="Delete Category"
+                description={`Are you sure you want to delete the category "${category.title}"?`}
+            />
+        </VStack>
     );
 };
 

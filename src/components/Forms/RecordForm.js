@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {useCategories} from "../../contexts/CategoriesContext";
 import {Button, FormControl, Grid, GridItem, Input, NumberInput, NumberInputField, Select} from "@chakra-ui/react";
 import Buttons from "../MyButtons/Buttons";
 import moment from "moment";
 
 const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved, placeholderDate }) => {
+    const getButtonAlpha = (isActive) => (isActive ? '100%' : '45%');
     const { categories, error } = useCategories();
     const [amount, setAmount] = useState(existingRecord ? existingRecord.amount : '');
     const [desc, setDesc] = useState(existingRecord ? existingRecord.desc : '');
-    const [recordType, setRecordType] = useState(existingRecord ? existingRecord.recordType : true);
+    const [recordType, setRecordType] = useState(existingRecord ? existingRecord.recordType : 1);
     const [selectedCategory, setSelectedCategory] = useState(existingRecord ? existingRecord.category : null);
 
     const [startDate, setStartDate] = useState(
@@ -84,7 +85,6 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved, placeholde
             });
     };
 
-
     return (
         <form onSubmit={handleSubmit}>
             <FormControl onSubmit={handleSubmit}>
@@ -95,10 +95,20 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved, placeholde
                     alignItems="center"
                 >
                     <GridItem>
-                        <Button onClick={() => handleRecordTypeChange(0)} bg="#ffffff">+</Button>
+                        <Button
+                            onClick={() => setRecordType(false)}
+                            opacity = {getButtonAlpha(!recordType)}
+                        >
+                            +
+                        </Button>
                     </GridItem>
                     <GridItem>
-                        <Button onClick={() => handleRecordTypeChange(1)} bg="#ffffff">-</Button>
+                        <Button
+                            onClick={() => setRecordType(true)}
+                            opacity = {getButtonAlpha(recordType)}
+                        >
+                            -
+                        </Button>
                     </GridItem>
                     <GridItem>
                         <NumberInput

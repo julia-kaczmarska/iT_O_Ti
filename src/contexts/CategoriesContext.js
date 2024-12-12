@@ -43,8 +43,36 @@ export const CategoriesProvider = ({ children }) => {
         ));
     };
 
+    const deleteCategory = async (categoryId) => {
+        console.log("Attempting to delete category with ID:", categoryId); // Debug log
+        try {
+            const token = localStorage.getItem('jwtToken');
+            const userId = localStorage.getItem('userId');
+            if (!token) throw new Error('No token found');
+
+            const response = await fetch(`http://localhost:8080/user/${userId}/category/${categoryId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            console.log("Server response:", response); // Debug log
+
+            if (!response.ok) throw new Error('Failed to delete category');
+
+            setCategories(categories.filter(category => category.categoryId !== categoryId));
+            console.log("Category deleted successfully"); // Debug log
+        } catch (error) {
+            setError(error.message);
+            console.error('Error deleting category:', error);
+        }
+    };
+
+
     return (
-        <CategoriesContext.Provider value={{ categories, updateCategory, error }}>
+        <CategoriesContext.Provider value={{ categories, updateCategory, deleteCategory, error }}>
             {children}
         </CategoriesContext.Provider>
     );

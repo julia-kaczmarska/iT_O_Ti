@@ -3,7 +3,7 @@ import { extendTheme } from '@chakra-ui/react';
 export const cinnamonRoll = {
     id: 'cinnamonRoll',
     colors: {
-        1: '#d3cfc6',
+        1: '#ececd7',
         2: '#5A4B48',
         3: '#8E583C',
         4: '#739881',
@@ -14,7 +14,7 @@ export const cinnamonRoll = {
 export const frostelle = {
     id: 'frostelle',
     colors: {
-        1: '#C3C5D1',
+        1: '#dadbe3',
         2: '#4B597A',
         3: '#7B6D95',
         4: '#e5d8bb',

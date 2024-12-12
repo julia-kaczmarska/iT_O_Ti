@@ -1,11 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Form from './Form';
 import { Link, useNavigate } from "react-router-dom";
 import {jwtDecode} from "jwt-decode"; // Poprawny import
 
 const AuthForm = ({ context }) => {
-    const navigate = useNavigate();
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
@@ -37,7 +35,6 @@ const AuthForm = ({ context }) => {
 
         }
     ];
-
 
     const handleSubmit = (e) => {
         e.preventDefault();

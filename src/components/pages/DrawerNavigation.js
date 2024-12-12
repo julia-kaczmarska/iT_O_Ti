@@ -22,7 +22,6 @@ const DrawerNavigation = ({  }) => {
     const handleLogout = () => {
         localStorage.removeItem('jwtToken');
         window.location.href = '/auth/login';
-        console.log("token: " + localStorage.getItem('jwtToken'));
     };
 
     return(
@@ -65,7 +64,9 @@ const DrawerNavigation = ({  }) => {
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel pb={4}>
-                                <Grid columns="repeat(2, 1fr)" gap={1}>
+                                <Grid templateColumns="auto 1fr"
+                                      alignItems="center"
+                                      gap={4}>
                                     <ColorPoints />
                                     <CategorySettings />
                                 </Grid>

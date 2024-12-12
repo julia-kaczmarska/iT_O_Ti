@@ -1,26 +1,21 @@
-import {Text, SimpleGrid, Stack, Table, TableCaption, TableContainer, Thead, Th} from "@chakra-ui/react";
-
-const Budget = ({}) => {
+import {Box, Grid, GridItem} from "@chakra-ui/react";
 
 
-    return (
-            <Stack>
-                <SimpleGrid columns={2}>
-                    <Text> Budget for month -- $$month </Text>
-                    <Text> $$amount </Text>
-                </SimpleGrid>
-                <TableContainer>
-                    <Table variant={'simple'}>
-                        <Thead>
-                            <Th>Category</Th>
-                            <Th>Budgeted</Th>
-                            <Th>Left</Th>
-                        </Thead>
-                    </Table>
-                </TableContainer>
+const Budget = () => {
+    return(
+        <Grid colSpan={3}  templateColumns="repeat(3, 1fr)">
 
-            </Stack>
-    );
-};
+            <GridItem bg="yellow.200">
+                <Box>Category</Box>
+            </GridItem>
+            <GridItem bg="yellow.300">
+                <Box>Budgeted</Box>
+            </GridItem>
+            <GridItem bg="yellow.400">
+                <Box>Left</Box>
+            </GridItem>
+        </Grid>
+    )
+}
 
 export default Budget;

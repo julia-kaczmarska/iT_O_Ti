@@ -7,12 +7,23 @@ import MyEventComponent from "./Records/MyEventComponent";
 import {Box} from "@chakra-ui/react";
 import DateCellWrapper from "./Records/DateCellWrapper";
 import {useThemeContext} from "../../themes/ThemeContext";
+import MyModal from "../MyButtons/MyModal";
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
+
 
 const localizer = momentLocalizer(moment);
 
 const MyCalendar = ({ currentMonth }) => {
+    const DnDCalendar = withDragAndDrop(Calendar);
     const [events, setEvents] = useState([]);
     const { activeColorTheme } = useThemeContext();
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    const closeModal = () => {
+        setModalOpen(false);
+        setSelectedDate(null);
+    };
 
     useEffect(() => {
         const fetchEventsForMonth = async () => {
@@ -44,20 +55,33 @@ const MyCalendar = ({ currentMonth }) => {
         fetchEventsForMonth();
     }, [currentMonth]);
 
+    const handleSelectSlot = slotInfo => {
+        setSelectedDate(slotInfo.start);
+    };
+
     return (
         <Box className="calendar-page" sx={{'--chakra-colors-chakra-border-color': activeColorTheme.colors[2]}}>
-            <Calendar
+            <DnDCalendar
                 localizer={localizer}
                 events={events}
                 startAccessor="start"
                 endAccessor="end"
                 date={new Date(currentMonth)}
                 getNow={() => new Date()} // Użycie bieżącego czasu lokalnego
+                selectable
+                onSelectSlot={handleSelectSlot}
                 components={{
                     event: MyEventComponent,
                     toolbar: () => null, // Ukrycie paska narzędzi
                     dateCellWrapper: DateCellWrapper,
                 }}
+            />
+
+            <MyModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                content="Add record"
+                placeholderDate={selectedDate}
             />
         </Box>
     );

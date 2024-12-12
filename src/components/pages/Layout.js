@@ -21,11 +21,11 @@ const Layout = ({ children }) => {
 
     useEffect(() => {
         const token = localStorage.getItem('jwtToken');
-
         if (token) {
             setIsAuthenticated(true);
         } else {
             setIsAuthenticated(false);
+            localStorage.clear();
         }
     }, []);
 

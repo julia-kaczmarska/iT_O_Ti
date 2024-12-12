@@ -1,5 +1,5 @@
 import {Box, Button, useDisclosure} from "@chakra-ui/react";
-import MyModal from "../MyModal";
+import MyModal from "./MyModal";
 import React, {useState} from "react";
 import {useThemeContext} from "../../themes/ThemeContext";
 import Buttons from "./Buttons";
