@@ -66,7 +66,8 @@ const DrawerNavigation = ({  }) => {
                             <AccordionPanel pb={4}>
                                 <Grid templateColumns="auto 1fr"
                                       alignItems="center"
-                                      gap={4}>
+                                      gap={4}
+                                      pb={4}>
                                     <ColorPoints />
                                     <CategorySettings />
                                 </Grid>

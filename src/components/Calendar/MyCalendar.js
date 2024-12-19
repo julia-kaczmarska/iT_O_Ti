@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './Calendar.css';
-import MyEventComponent from "./Records/MyEventComponent";
+import MyEventComponent from "./MyOwnCal/MyEventComponent";
 import {Box} from "@chakra-ui/react";
 import DateCellWrapper from "./Records/DateCellWrapper";
 import {useThemeContext} from "../../themes/ThemeContext";

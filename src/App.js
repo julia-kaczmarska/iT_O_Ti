@@ -59,7 +59,7 @@ function App() {
                                 <Route path="/auth/login" element={<UnauthorizedPage />} />
                                 <Route path="/auth/register" element={<UnauthorizedPage />} />
                                 <Route path="/user/:userId" element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
-                                <Route path="/" element={<MyOwnCal />} />
+                                <Route path="/" element={<UnauthorizedPage />} />
                             </Routes>
                         </Router>
                     </Layout>

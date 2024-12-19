@@ -74,7 +74,7 @@ const Form = ({ fields, onSubmit, buttonText, link }) => {
                         )}
                     </FormControl>
                 ))}
-                <SimpleGrid columns={{ sm: 1, md: 2 }}>
+                <SimpleGrid columns={{ sm: 1, md: 2 }} gap={10}>
                     <Buttons label={buttonText} onClick={handleSubmit}/>
                     {link && (
                         <Buttons type='secondary' label={link}/>

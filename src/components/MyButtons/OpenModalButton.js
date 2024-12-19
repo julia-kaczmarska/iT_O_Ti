@@ -4,7 +4,7 @@ import React, {useState} from "react";
 import {useThemeContext} from "../../themes/ThemeContext";
 import Buttons from "./Buttons";
 
- const OpenModalButton = ({label, placeholderDate}) => {
+ const OpenModalButton = ({label, placeholderDate, fitToParent}) => {
      const { isOpen, onOpen, onClose } = useDisclosure()
 
      const openModal = () => {
@@ -13,8 +13,8 @@ import Buttons from "./Buttons";
 
     return(
         <Box>
-            <Buttons onClick={() => openModal()} label={label}/>
-            <MyModal isOpen={isOpen} onClose={onClose} content={label} placeholderDate={placeholderDate}/>
+            <Buttons onClick={() => openModal()} label={label} fitToParent={fitToParent}/>
+            <MyModal isOpen={isOpen} onClose={onClose} content={label} placeholderDate={placeholderDate} />
         </Box>
 );
 
