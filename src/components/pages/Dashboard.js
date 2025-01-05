@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Box, SimpleGrid, Heading, Text, VStack } from "@chakra-ui/react";
 import {useThemeContext} from "../../themes/ThemeContext";
 import BudgetLayout from "../Budget/BudgetLayout";
-import MyOwnCal from "../Calendar/MyOwnCal/MyOwnCal";
-import CalendarNavigation from "../Calendar/MyOwnCal/CalendarNavigation";
+import MyOwnCal from "../Calendar/MyOwnCal";
+import CalendarNavigation from "../Calendar/CalendarNavigation";
 
 const Dashboard = ( { }) => {
     const { activeColorTheme } = useThemeContext(); // Pobierz aktywny motyw z kontekstu

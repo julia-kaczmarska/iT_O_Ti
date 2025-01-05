@@ -6,7 +6,7 @@ import {
     AlertDialogContent,
     AlertDialogHeader,
     AlertDialogBody,
-    AlertDialogFooter,
+    AlertDialogFooter, Text,
 } from '@chakra-ui/react'
 
 const MyAlertDialog = ( {isOpen, onClose, onConfirm, title, description} ) => {
@@ -21,11 +21,11 @@ const MyAlertDialog = ( {isOpen, onClose, onConfirm, title, description} ) => {
             <AlertDialogOverlay>
                 <AlertDialogContent>
                     <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                        {title}
+                        <Text>Are you sure you want to delete this record?</Text>
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
-                        {description}
+                        <Text>This action cannot be reversed</Text>
                     </AlertDialogBody>
 
                     <AlertDialogFooter>

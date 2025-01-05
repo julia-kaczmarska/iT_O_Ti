@@ -1,16 +1,27 @@
-import React, {useEffect, useState} from 'react';
-import {useCategories} from "../../contexts/CategoriesContext";
-import {Button, FormControl, Grid, GridItem, Input, NumberInput, NumberInputField, Select} from "@chakra-ui/react";
+import React, { useEffect, useState } from 'react';
+import { useCategories } from "../../contexts/CategoriesContext";
+import {
+    Button,
+    FormControl,
+    Grid,
+    GridItem,
+    Input,
+    NumberInput,
+    NumberInputField,
+    Select
+} from "@chakra-ui/react";
 import Buttons from "../MyButtons/Buttons";
 import moment from "moment";
+import DeleteButton from "../MyButtons/DeleteButton";
 
-const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved, placeholderDate }) => {
-    const getButtonAlpha = (isActive) => (isActive ? '100%' : '45%');
-    const { categories, error } = useCategories();
+const RecordForm = ({ isEdit, existingRecord, placeholderDate }) => {
+    const { categories } = useCategories();
+    const [recordId, setRecordId] = useState(isEdit ? existingRecord.cashflowRecordId : null);
     const [amount, setAmount] = useState(existingRecord ? existingRecord.amount : '');
     const [desc, setDesc] = useState(existingRecord ? existingRecord.desc : '');
     const [recordType, setRecordType] = useState(existingRecord ? existingRecord.recordType : 1);
-    const [selectedCategory, setSelectedCategory] = useState(existingRecord ? existingRecord.category : null);
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [catColor, setCatColor] = useState('');
 
     const [startDate, setStartDate] = useState(
         existingRecord ? existingRecord.startDate : placeholderDate ? moment(placeholderDate).format('YYYY-MM-DD') : ''
@@ -20,26 +31,35 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved, placeholde
         placeholderDate ? moment(placeholderDate).format('YYYY-MM-DD') : ''
     );
 
+    // Dodanie logów do useEffect
+    useEffect(() => {
+        console.log("useEffect triggered");
+        console.log("isEdit:", isEdit);
+        console.log("existingRecord:", existingRecord);
+        console.log("categories:", categories);
 
-
-    console.log('Selected date:', selectedDate);
-
-    const handleRecordTypeChange = (type) => {
-        setRecordType(type);
-    };
-
-    const format = (val) => `$` + val
-    const parse = (val) => val.replace(/^\$/, '')
-
-
+        if (isEdit && existingRecord && existingRecord.categoryId) {
+            const matchingCategory = categories.find(
+                (category) => category.categoryId === existingRecord.categoryId
+            );
+            console.log("Matching category:", matchingCategory);
+            if (matchingCategory) {
+                setSelectedCategory(matchingCategory.title); // Ustawiamy tytuł jako wartość
+                setCatColor(matchingCategory.color);
+            } else {
+                console.log("No matching category found");
+            }
+        }
+    }, [isEdit, existingRecord, categories]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log("Submitting form...");
+        console.log("Selected category:", selectedCategory);
 
         const token = localStorage.getItem('jwtToken');
         const userId = localStorage.getItem('userId');
 
-        // Upewnij się, że `startDate` lub `selectedDate` jest poprawnie ustawione
         const finalStartDate = startDate || selectedDate;
 
         if (!finalStartDate) {
@@ -51,19 +71,26 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved, placeholde
             .set({ hour: 12, minute: 0, second: 0 })
             .toISOString();
 
+        const categoryId = categories.find(category => category.title === selectedCategory)?.categoryId;
+
+        console.log("Category ID for submission:", categoryId);
+
         const newRecord = {
             amount: parseFloat(amount),
-            startDate: adjustedStartDate, // Przekazujemy jako ISO string z "neutralnym" czasem
-            recordType: recordType ? true : false,
+            startDate: adjustedStartDate,
+            recordType: recordType,
             desc,
-            categoryId: parseInt(selectedCategory),
+            categoryId, // Przekazujemy `categoryId`, znalezione na podstawie `selectedCategory`
         };
 
+        console.log("Payload:", newRecord);
 
-        console.log("Wysyłane dane:", newRecord);
+        const url = isEdit
+            ? `http://localhost:8080/user/${userId}/records/${recordId}`
+            : `http://localhost:8080/user/${userId}/addrecords`;
 
-        fetch(`http://localhost:8080/user/${userId}/addrecords`, {
-            method: 'POST',
+        fetch(url, {
+            method: isEdit ? 'PUT' : 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -87,7 +114,7 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved, placeholde
 
     return (
         <form onSubmit={handleSubmit}>
-            <FormControl onSubmit={handleSubmit}>
+            <FormControl>
                 <Grid
                     m={3}
                     templateColumns="auto auto 1fr"
@@ -97,7 +124,7 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved, placeholde
                     <GridItem>
                         <Button
                             onClick={() => setRecordType(false)}
-                            opacity = {getButtonAlpha(!recordType)}
+                            opacity={recordType ? '45%' : '100%'}
                         >
                             +
                         </Button>
@@ -105,7 +132,7 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved, placeholde
                     <GridItem>
                         <Button
                             onClick={() => setRecordType(true)}
-                            opacity = {getButtonAlpha(recordType)}
+                            opacity={recordType ? '100%' : '45%'}
                         >
                             -
                         </Button>
@@ -127,39 +154,46 @@ const RecordForm = ({ isEdit, existingRecord, onClose, onRecordSaved, placeholde
                 <Input
                     borderColor='#ffffff'
                     m={3}
-                    label= 'Description'
-                    placeholder= 'Your cashflow description :)'
-                    required ={true}
-                    onChange = {(e) => setDesc(e.target.value)}
+                    placeholder="Your cashflow description :)"
+                    required
+                    value={desc}
+                    onChange={(e) => setDesc(e.target.value)}
                 />
                 <Input
                     borderColor='#ffffff'
                     m={3}
                     type="date"
                     value={startDate ? startDate : selectedDate}
-                    required={true}
+                    required
                     onChange={(e) => setStartDate(e.target.value)}
                 />
                 <Select
+                    bg = {selectedCategory ? catColor : null}
                     borderColor='#ffffff'
                     m={3}
-                    label= 'Choose the cashflow category'
-                    required={true}
-                    // value={field.value}
-                    placeholder='Choose a category'
+                    required
+                    value={selectedCategory || ""}
+                    placeholder="Choose a category"
                     onChange={(e) => setSelectedCategory(e.target.value)}
                 >
                     {categories.map((category) => (
-                        <option key={category.categoryId} value={category.categoryId}>
+                        <option key={category.categoryId} value={category.title}>
                             {category.title}
                         </option>
                     ))}
                 </Select>
             </FormControl>
-        <Buttons label='Confirm' onClick={handleSubmit}/>
+            <Buttons label="Confirm" onClick={handleSubmit} />
+            {isEdit && (
+                <DeleteButton
+                    recordId={existingRecord.cashflowRecordId}
+                    onDelete={(id) => {
+                        console.log(`Record with id ${id} deleted.`);
+                    }}
+                />
+            )}
         </form>
-
-);
+    );
 };
 
-export default RecordForm;
+export default React.memo(RecordForm);

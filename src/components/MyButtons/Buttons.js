@@ -14,16 +14,14 @@ const Buttons = ({ onClick, label, type = 'primary', variant = 'solid', fitToPar
             onClick={onClick}
             bg={color}
             _hover={{ backgroundColor: hov }}
-            position={fitToParent ? "absolute" : "relative"}
-            top={fitToParent ? 0 : "auto"}
-            left={fitToParent ? 0 : "auto"}
-            w={fitToParent ? "100%" : "auto"}
-            h={fitToParent ? "20px" : "auto"}
-            p={fitToParent ? 0 : 3}
+            w={fitToParent ? "100%" : "auto"} // Dopasowanie szerokości
+            h={fitToParent ? "100%" : "auto"} // Dopasowanie wysokości
+            p={fitToParent ? 0 : 3}          // Bez wewnętrznego odstępu, jeśli fitToParent
         >
             {label}
         </Button>
     );
-}
+};
 
 export default Buttons;
+

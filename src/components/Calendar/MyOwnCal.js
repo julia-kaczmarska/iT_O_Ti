@@ -1,8 +1,6 @@
-import { Box, Text, Grid, GridItem, Button } from "@chakra-ui/react";
+import { Box, Text, Grid, Button } from "@chakra-ui/react";
 import React, { useState } from "react";
-import MyEventComponent from "./MyEventComponent";
-import { useThemeContext } from "../../../themes/ThemeContext";
-import OpenModalButton from "../../MyButtons/OpenModalButton";
+import { useThemeContext } from "../../themes/ThemeContext";
 import CalendarGrid from "./CalendarGrid";
 
 const MyOwnCal = ({ currentMonth, currentYear }) => {
@@ -19,10 +17,6 @@ const MyOwnCal = ({ currentMonth, currentYear }) => {
 
     const toggleWeekStart = () => {
         setIsMondayFirst((prev) => !prev);
-    };
-
-    const getPlaceholderDate = (day) => {
-        return new Date(currentYear, currentMonth, day+2).toISOString().split('T')[0]; // format YYYY-MM-DD
     };
 
     return (

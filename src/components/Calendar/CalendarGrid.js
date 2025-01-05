@@ -1,8 +1,8 @@
 import { Box, Text, Grid, GridItem, Button } from "@chakra-ui/react";
 import React, { useState } from "react";
 import MyEventComponent from "./MyEventComponent";
-import { useThemeContext } from "../../../themes/ThemeContext";
-import OpenModalButton from "../../MyButtons/OpenModalButton";
+import { useThemeContext } from "../../themes/ThemeContext";
+import OpenModalButton from "../MyButtons/OpenModalButton";
 
 const MyOwnCal = ({ currentMonth, currentYear, isMondayFirst, daysInMonth }) => {
     const { activeColorTheme } = useThemeContext();
@@ -25,7 +25,8 @@ const MyOwnCal = ({ currentMonth, currentYear, isMondayFirst, daysInMonth }) => 
             <Grid templateColumns="repeat(7, 1fr)" gap={2} className='month-days'>
                 {daysGrid.map((day, index) => (
                     <GridItem
-                        h='100px'
+                        key={index}
+                        h='115px'
                         borderRadius="md"
                         textAlign="center"
                         boxShadow="sm"
@@ -44,11 +45,24 @@ const MyOwnCal = ({ currentMonth, currentYear, isMondayFirst, daysInMonth }) => 
                         onMouseEnter={() => setHoveredIndex(index)}
                         onMouseLeave={() => setHoveredIndex(null)}
                     >
-                        <Box className='month-day-header' key={index} h='20px' mb={1} position='relative'>
+                        <Box
+                            className="month-day-header"
+                            key={index}
+                            h="20px"
+                            mb={1}
+                            position="relative"
+                            onMouseEnter={() => setHoveredIndex(index)}
+                            onMouseLeave={() => setHoveredIndex(null)}
+                        >
                             {hoveredIndex === index ? (
-                                <OpenModalButton label="+" type="secondary" placeholderDate={getPlaceholderDate(day)} fitToParent={true}/>
+                                <OpenModalButton
+                                    label="+"
+                                    modalType="AddRecord"
+                                    modalProps={{ placeholderDate: getPlaceholderDate(day) }}
+                                    fitToParent={true}
+                                />
                             ) : (
-                                <Text>{day + 1}</Text>
+                                <Text textAlign="center">{day + 1}</Text>
                             )}
                         </Box>
                         <Box className='month-day-content'>

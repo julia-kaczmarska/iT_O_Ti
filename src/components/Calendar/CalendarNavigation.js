@@ -1,5 +1,5 @@
 import { Box, Heading } from "@chakra-ui/react";
-import Buttons from "../../MyButtons/Buttons";
+import Buttons from "../MyButtons/Buttons";
 
 const CalendarNavigation = ({ onPrevMonth, onNextMonth, formattedMonth, activeColorTheme }) => {
     return (

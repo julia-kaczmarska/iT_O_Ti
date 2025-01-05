@@ -71,7 +71,7 @@ const DrawerNavigation = ({  }) => {
                                     <ColorPoints />
                                     <CategorySettings />
                                 </Grid>
-                                <OpenModalButton label='Add category' onClose={true}/>
+                                <OpenModalButton label='Add Category' modalType='AddCategory' onClose={true}/>
                             </AccordionPanel>
                         </AccordionItem>
                     </Accordion>

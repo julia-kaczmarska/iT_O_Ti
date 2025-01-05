@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Form from "./Form";
 import { jwtDecode } from "jwt-decode";
 
-const CategoryForm = ({ category, onClose, onCategoryAdded }) => {
+const CategoryForm = ({ category }) => {
     const [title, setTitle] = useState(category ? category.title : '');
     const [color, setColor] = useState(category ? category.color : '');
 

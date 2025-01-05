@@ -9,7 +9,8 @@ import {ThemeProvider} from "./themes/ThemeContext";
 import {CategoriesProvider} from "./contexts/CategoriesContext";
 import AppThemeProvider from "./themes/AppThemeProvider";
 import {jwtDecode} from "jwt-decode";
-import MyOwnCal from "./components/Calendar/MyOwnCal/MyOwnCal";
+import MyOwnCal from "./components/Calendar/MyOwnCal";
+import {ModalProvider} from "./contexts/ModalContext";
 
 function App() {
 
@@ -52,18 +53,20 @@ function App() {
     return (
         <ChakraProvider>
             <AppThemeProvider>
-                <CategoriesProvider>
-                    <Layout>
-                        <Router>
-                            <Routes>
-                                <Route path="/auth/login" element={<UnauthorizedPage />} />
-                                <Route path="/auth/register" element={<UnauthorizedPage />} />
-                                <Route path="/user/:userId" element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
-                                <Route path="/" element={<UnauthorizedPage />} />
-                            </Routes>
-                        </Router>
-                    </Layout>
-                </CategoriesProvider>
+                <ModalProvider>
+                    <CategoriesProvider>
+                        <Layout>
+                            <Router>
+                                <Routes>
+                                    <Route path="/auth/login" element={<UnauthorizedPage />} />
+                                    <Route path="/auth/register" element={<UnauthorizedPage />} />
+                                    <Route path="/user/:userId" element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
+                                    <Route path="/" element={<UnauthorizedPage />} />
+                                </Routes>
+                            </Router>
+                        </Layout>
+                    </CategoriesProvider>
+                </ModalProvider>
             </AppThemeProvider>
         </ChakraProvider>
     );

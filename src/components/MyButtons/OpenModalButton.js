@@ -1,24 +1,23 @@
-import {Box, Button, useDisclosure} from "@chakra-ui/react";
-import MyModal from "./MyModal";
-import React, {useState} from "react";
-import {useThemeContext} from "../../themes/ThemeContext";
+import React from 'react';
+import { Box } from '@chakra-ui/react';
+import { useModal } from '../../contexts/ModalContext';
 import Buttons from "./Buttons";
+import MyModalManager from "../pages/MyModalManager";
 
- const OpenModalButton = ({label, placeholderDate, fitToParent}) => {
-     const { isOpen, onOpen, onClose } = useDisclosure()
+const OpenModalButton = ({ modalType, modalProps, label, fitToParent }) => {
+    const { openModal } = useModal();
 
-     const openModal = () => {
-         onOpen();
-    };
-
-    return(
-        <Box>
-            <Buttons onClick={() => openModal()} label={label} fitToParent={fitToParent}/>
-            <MyModal isOpen={isOpen} onClose={onClose} content={label} placeholderDate={placeholderDate} />
+    return (
+        <Box w="100%" h="100%"> {/* Zapewnia pełne dopasowanie do rodzica */}
+            <Buttons
+                onClick={() => openModal(modalType, modalProps)}
+                label={label}
+                fitToParent={fitToParent}
+            />
+            <MyModalManager/>
         </Box>
-);
+    );
+};
 
-}
-export default OpenModalButton
-
+export default OpenModalButton;
 
