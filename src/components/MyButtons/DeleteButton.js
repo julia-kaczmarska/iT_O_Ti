@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { IconButton } from "@chakra-ui/react";
 import MyAlertDialog from './MyAlertDialog';
 import {DeleteIcon} from "@chakra-ui/icons";
+import {useThemeContext} from "../../themes/ThemeContext";
 
 const DeleteButton = ({ recordId, onDelete }) => {
+    const { activeColorTheme } = useThemeContext();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const handleDelete = async () => {
@@ -38,8 +40,7 @@ const DeleteButton = ({ recordId, onDelete }) => {
         <>
             <IconButton
                 icon={<DeleteIcon />}
-                colorScheme="red"
-                aria-label="Delete Record"
+                bg={activeColorTheme.colors[4]}
                 onClick={handleOpenDialog}
             />
 

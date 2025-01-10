@@ -17,7 +17,7 @@ export const frostelle = {
         1: '#dadbe3',
         2: '#4B597A',
         3: '#7B6D95',
-        4: '#e5d8bb',
+        4: '#b48383',
         5: '#181D30',
     },
 };

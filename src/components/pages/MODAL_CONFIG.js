@@ -1,32 +1,32 @@
 import RecordForm from "../Forms/RecordForm";
 import React from "react";
 import CategoryForm from "../Forms/CategoryForm";
-import Buttons from "../MyButtons/Buttons";
-import CategorySettings from "../Categories/CategorySettings";
-import ColorPoints from "../Categories/ColorPoints";
+
 import {Box, Grid} from "@chakra-ui/react";
 
 const MODAL_CONFIG = {
-    'CategorySettings': {
-        label: 'Category settings',
-        content: (
-            <Box>
-                <Grid templateColumns="repeat(2, 1fr)" gap={1}>
-                    <ColorPoints />
-                    <CategorySettings />
-                </Grid>
-                <Buttons label="Add category" />
-            </Box>
-        ),
-    },
+    // 'EditableCategory': {
+    //     label: 'Category settings',
+    //     content: (
+    //         <Box>
+    //             <Grid templateColumns="repeat(2, 1fr)" gap={1}>
+    //                 <ColorPoint />
+    //                 <EditableCategory />
+    //             </Grid>
+    //             <Buttons label="Add category" />
+    //         </Box>
+    //     ),
+    // },
     'AddCategory': {
         label: 'Add category',
         content: <CategoryForm isEdit={false} />,
     },
     'AddRecord': {
-        label: '+',
+        label: 'Add record',
         content: (props) => (
-            <RecordForm isEdit={false} placeholderDate={props.placeholderDate}/>
+            <RecordForm
+                isEdit={false}
+                dateFromCal={props.dateFromCal}/>
         ),
     },
     'EditRecord': {
@@ -34,14 +34,14 @@ const MODAL_CONFIG = {
         content: (props) => (
             <RecordForm
                 isEdit={true}
-                // placeholderDate={props.placeholderDate}
+                refreshEvents={props.refreshEvents}
                 existingRecord={props.existingRecord}
             />
         ),
     },
     'ShowMoreRecords': {
         label: 'More records',
-        content: (props) => (
+        content: (props= {}) => (
             <Box>
                 {props.records.map((record, index) => (
                     <Box

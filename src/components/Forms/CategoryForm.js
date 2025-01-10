@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import Form from "./Form";
-import { jwtDecode } from "jwt-decode";
+import ChromePicker from '../Categories/ChromePicker';
+import {Box, Text, Button, FormControl, FormLabel, Input, VStack} from "@chakra-ui/react";
+import {useThemeContext} from "../../themes/ThemeContext";
 
 const CategoryForm = ({ category }) => {
+    const activeColorTheme = useThemeContext();
     const [title, setTitle] = useState(category ? category.title : '');
-    const [color, setColor] = useState(category ? category.color : '');
-
+    const [color, setColor] = useState(category ? category.color : '#000000');  // Ustaw domyślny kolor jeśli kategoria nie ma koloru
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -43,32 +44,26 @@ const CategoryForm = ({ category }) => {
     };
 
     return (
-        <div>
-            <Form
-                fields={[
-                    {
-                        label: 'Title',
-                        type: 'text',
-                        name: 'title',
-                        value: title,
-                        placeholder: 'Enter category title',
-                        required: true,
-                        onChange: (e) => setTitle(e.target.value),
-                    },
-                    {
-                        label: 'Color',
-                        type: 'text',
-                        name: 'color',
-                        value: color,
-                        placeholder: 'Enter category color',
-                        required: true,
-                        onChange: (e) => setColor(e.target.value),
-                    }]
-                }
-                onSubmit={handleSubmit}
-                buttonText={'Create'}
-            />
-        </div>
+        <Box>
+            <form onSubmit={handleSubmit}>
+                <VStack spacing={4}>
+                    <FormControl isRequired={true}>
+                        <FormLabel>Category title</FormLabel>
+                            <Input
+                                bg='white'
+                                type="text"
+                                name='title'
+                                value={title}
+                                placeholder='Enter category title'
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                    </FormControl>
+                    <Text size='xl'>Category color</Text>
+                    <ChromePicker previousColor={color} onColorSelect={setColor} />
+                </VStack>
+            </form>
+            <Button onClick={handleSubmit}>Create</Button>
+        </Box>
     );
 };
 

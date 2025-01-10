@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useCategories } from "../../contexts/CategoriesContext";
 import {
+    Alert, AlertIcon,
     Button,
     FormControl,
     Grid,
@@ -8,54 +9,60 @@ import {
     Input,
     NumberInput,
     NumberInputField,
-    Select
 } from "@chakra-ui/react";
+import Select from 'react-select';
 import Buttons from "../MyButtons/Buttons";
 import moment from "moment";
 import DeleteButton from "../MyButtons/DeleteButton";
+import {useModal} from "../../contexts/ModalContext";
 
-const RecordForm = ({ isEdit, existingRecord, placeholderDate }) => {
+const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
+    const { closeModal } = useModal();
     const { categories } = useCategories();
+    const [error, setError] = useState(null);
     const [recordId, setRecordId] = useState(isEdit ? existingRecord.cashflowRecordId : null);
     const [amount, setAmount] = useState(existingRecord ? existingRecord.amount : '');
     const [desc, setDesc] = useState(existingRecord ? existingRecord.desc : '');
     const [recordType, setRecordType] = useState(existingRecord ? existingRecord.recordType : 1);
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [catColor, setCatColor] = useState('');
-
+    const [prevCategory, setPrevCategory] = useState(null); //do wyświetlenia w formie
+    const [presentCategory, setPresentCategory] = useState(null);
     const [startDate, setStartDate] = useState(
-        existingRecord ? existingRecord.startDate : placeholderDate ? moment(placeholderDate).format('YYYY-MM-DD') : ''
+        existingRecord ? existingRecord.startDate : dateFromCal ? moment(dateFromCal).format('YYYY-MM-DD') : ''
     );
-
     const [selectedDate, setSelectedDate] = useState(
-        placeholderDate ? moment(placeholderDate).format('YYYY-MM-DD') : ''
+        dateFromCal ? moment(dateFromCal).format('YYYY-MM-DD') : ''
     );
 
-    // Dodanie logów do useEffect
     useEffect(() => {
-        console.log("useEffect triggered");
-        console.log("isEdit:", isEdit);
-        console.log("existingRecord:", existingRecord);
-        console.log("categories:", categories);
-
         if (isEdit && existingRecord && existingRecord.categoryId) {
             const matchingCategory = categories.find(
                 (category) => category.categoryId === existingRecord.categoryId
             );
-            console.log("Matching category:", matchingCategory);
             if (matchingCategory) {
-                setSelectedCategory(matchingCategory.title); // Ustawiamy tytuł jako wartość
-                setCatColor(matchingCategory.color);
-            } else {
-                console.log("No matching category found");
+                setPrevCategory(matchingCategory);
+                setPresentCategory({
+                    value: matchingCategory.categoryId,
+                    label: matchingCategory.title,
+                    color: matchingCategory.color,
+                });
             }
         }
     }, [isEdit, existingRecord, categories]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Submitting form...");
-        console.log("Selected category:", selectedCategory);
+        if (!amount || isNaN(parseFloat(amount))) {
+            setError("Please enter a valid amount");
+            return;
+        }
+        if (!desc) {
+            setError("Description cannot be empty");
+            return;
+        }
+        if (!startDate) {
+            setError("Please select a date");
+            return;
+        }
 
         const token = localStorage.getItem('jwtToken');
         const userId = localStorage.getItem('userId');
@@ -71,19 +78,15 @@ const RecordForm = ({ isEdit, existingRecord, placeholderDate }) => {
             .set({ hour: 12, minute: 0, second: 0 })
             .toISOString();
 
-        const categoryId = categories.find(category => category.title === selectedCategory)?.categoryId;
-
-        console.log("Category ID for submission:", categoryId);
+        const categoryId = presentCategory?.value;
 
         const newRecord = {
             amount: parseFloat(amount),
             startDate: adjustedStartDate,
             recordType: recordType,
             desc,
-            categoryId, // Przekazujemy `categoryId`, znalezione na podstawie `selectedCategory`
+            categoryId,
         };
-
-        console.log("Payload:", newRecord);
 
         const url = isEdit
             ? `http://localhost:8080/user/${userId}/records/${recordId}`
@@ -98,7 +101,6 @@ const RecordForm = ({ isEdit, existingRecord, placeholderDate }) => {
             body: JSON.stringify(newRecord),
         })
             .then((response) => {
-                console.log("Response status:", response.status);
                 if (!response.ok) {
                     throw new Error(`Network response was not ok: ${response.status}`);
                 }
@@ -106,10 +108,45 @@ const RecordForm = ({ isEdit, existingRecord, placeholderDate }) => {
             })
             .then((data) => {
                 console.log(isEdit ? 'Record updated:' : 'Record added:', data);
+                setError("");
+                closeModal();
+                refreshEvents();
             })
             .catch((error) => {
                 console.error('There was a problem with the fetch operation:', error);
             });
+    };
+
+    // Przygotowanie opcji dla react-select
+    const categoryOptions = categories.map((category) => ({
+        value: category.categoryId,
+        label: category.title,
+        color: category.color,
+    }));
+
+    // Niestandardowe style dla react-select
+    const customStyles = {
+        control: (provided, state) => ({
+            ...provided,
+            backgroundColor: presentCategory ? presentCategory.color : '#fff',
+            borderColor: '#ffffff',
+            margin: '12px',
+            boxShadow: state.isFocused ? null : null,
+        }),
+        option: (provided, { data, isFocused, isSelected }) => ({
+            ...provided,
+            backgroundColor: isFocused ? data.color : isSelected ? data.color : null,
+            color: '#000',
+            cursor: 'pointer',
+        }),
+        singleValue: (provided, { data }) => ({
+            ...provided,
+            color: '#000',
+        }),
+        menu: (provided) => ({
+            ...provided,
+            zIndex: 9999, // Aby menu było na wierzchu
+        }),
     };
 
     return (
@@ -141,12 +178,45 @@ const RecordForm = ({ isEdit, existingRecord, placeholderDate }) => {
                         <NumberInput
                             borderColor="#ffffff"
                             precision={2}
-                            value={amount}
+                            value={amount === "" ? "" : amount} // Pokaż pusty ciąg, jeśli pole jest puste
                             max={999999}
                             placeholder="Cashflow amount"
-                            onChange={(valueAsString, valueAsNumber) => setAmount(valueAsNumber)}
+                            onChange={(valueAsString) => {
+                                // Zamiana przecinka na kropkę i obsługa pustego pola
+                                const normalizedValue = valueAsString.replace(",", ".");
+                                if (normalizedValue === "") {
+                                    setAmount("");
+                                    return;
+                                }
+
+                                // Walidacja wartości jako liczby
+                                if (!isNaN(normalizedValue) && /^[0-9]*\.?[0-9]*$/.test(normalizedValue)) {
+                                    setAmount(normalizedValue);
+                                }
+                            }}
+                            onBlur={() => {
+                                // Formatowanie wartości na liczbę z dwoma miejscami po przecinku po utracie focusu
+                                if (amount === "" || isNaN(amount)) {
+                                    setAmount(""); // Pole pozostaje puste
+                                } else {
+                                    setAmount(parseFloat(amount).toFixed(2)); // Formatowanie do dwóch miejsc po przecinku
+                                }
+                            }}
                         >
-                            <NumberInputField />
+                            <NumberInputField
+                                onKeyDown={(e) => {
+                                    // Umożliwienie wpisania przecinka jako separatora dziesiętnego
+                                    if (e.key === ",") {
+                                        e.preventDefault();
+                                        const inputElement = e.target;
+                                        const cursorPosition = inputElement.selectionStart;
+
+                                        const newValue =
+                                            amount.slice(0, cursorPosition) + "." + amount.slice(cursorPosition);
+                                        setAmount(newValue);
+                                    }
+                                }}
+                            />
                         </NumberInput>
                     </GridItem>
                 </Grid>
@@ -167,21 +237,14 @@ const RecordForm = ({ isEdit, existingRecord, placeholderDate }) => {
                     required
                     onChange={(e) => setStartDate(e.target.value)}
                 />
+
                 <Select
-                    bg = {selectedCategory ? catColor : null}
-                    borderColor='#ffffff'
-                    m={3}
-                    required
-                    value={selectedCategory || ""}
+                    styles={customStyles}
+                    options={categoryOptions}
+                    value={presentCategory}
                     placeholder="Choose a category"
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                >
-                    {categories.map((category) => (
-                        <option key={category.categoryId} value={category.title}>
-                            {category.title}
-                        </option>
-                    ))}
-                </Select>
+                    onChange={(selectedOption) => setPresentCategory(selectedOption)}
+                />
             </FormControl>
             <Buttons label="Confirm" onClick={handleSubmit} />
             {isEdit && (
@@ -189,8 +252,17 @@ const RecordForm = ({ isEdit, existingRecord, placeholderDate }) => {
                     recordId={existingRecord.cashflowRecordId}
                     onDelete={(id) => {
                         console.log(`Record with id ${id} deleted.`);
+                        refreshEvents();
+                        closeModal();
                     }}
                 />
+            )}
+
+            {error && (
+                <Alert status="error" marginY={4}>
+                    <AlertIcon />
+                    {error}
+                </Alert>
             )}
         </form>
     );

@@ -10,14 +10,15 @@ import {
 } from "@chakra-ui/react";
 import {cinnamonRoll, frostelle, matchaLatte, other, strawberryMilkshake} from "../../themes/Themes";
 import { useThemeContext } from "../../themes/ThemeContext";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import OpenModalButton from "../MyButtons/OpenModalButton";
-import CategorySettings from "../Categories/CategorySettings";
-import ColorPoints from "../Categories/ColorPoints";
 import Buttons from "../MyButtons/Buttons";
+import {useCategories} from "../../contexts/CategoriesContext";
+import CategoryManager from "../Categories/CategoryManager";
 
 const DrawerNavigation = ({  }) => {
     const { activeColorTheme, switchTheme } = useThemeContext();
+    const { categories } = useCategories();
 
     const handleLogout = () => {
         localStorage.removeItem('jwtToken');
@@ -64,16 +65,13 @@ const DrawerNavigation = ({  }) => {
                                 </AccordionButton>
                             </h2>
                             <AccordionPanel pb={4}>
-                                <Grid templateColumns="auto 1fr"
-                                      alignItems="center"
-                                      gap={4}
-                                      pb={4}>
-                                    <ColorPoints />
-                                    <CategorySettings />
+                                <Grid templateColumns="repeat(1, 1fr)" alignItems="center" gap={4} pb={4}>
+                                    <CategoryManager />
                                 </Grid>
                                 <OpenModalButton label='Add Category' modalType='AddCategory' onClose={true}/>
                             </AccordionPanel>
                         </AccordionItem>
+
                     </Accordion>
 
 
