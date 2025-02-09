@@ -51,6 +51,7 @@ const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         if (!amount || isNaN(parseFloat(amount))) {
             setError("Please enter a valid amount");
             return;
@@ -80,17 +81,21 @@ const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
 
         const categoryId = presentCategory?.value;
 
-        const newRecord = {
-            amount: parseFloat(amount),
-            startDate: adjustedStartDate,
-            recordType: recordType,
-            desc,
-            categoryId,
-        };
+        // Przygotowanie danych w formie listy (nawet jeśli jest to pojedynczy rekord)
+        const records = [
+            {
+                cashflowRecordId: isEdit ? recordId : null, // Jeśli edytujemy, dodajemy ID
+                amount: parseFloat(amount),
+                startDate: adjustedStartDate,
+                recordType: recordType,
+                desc,
+                categoryId,
+            },
+        ];
 
         const url = isEdit
-            ? `http://localhost:8080/user/${userId}/records/${recordId}`
-            : `http://localhost:8080/user/${userId}/addrecords`;
+            ? `http://localhost:8080/user/${userId}/editRecords`
+            : `http://localhost:8080/user/${userId}/addExpense`;
 
         fetch(url, {
             method: isEdit ? 'PUT' : 'POST',
@@ -98,7 +103,7 @@ const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(newRecord),
+            body: JSON.stringify(records), // Wysyłamy listę rekordów
         })
             .then((response) => {
                 if (!response.ok) {
@@ -107,7 +112,8 @@ const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
                 return response.json();
             })
             .then((data) => {
-                console.log(isEdit ? 'Record updated:' : 'Record added:', data);
+                console.log(isEdit ? 'Records updated:' : 'Records added:', data);
+                console.log('refreshEvents in RecordForm:', refreshEvents);
                 setError("");
                 closeModal();
                 refreshEvents();
@@ -116,6 +122,7 @@ const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
                 console.error('There was a problem with the fetch operation:', error);
             });
     };
+
 
     // Przygotowanie opcji dla react-select
     const categoryOptions = categories.map((category) => ({
@@ -158,14 +165,14 @@ const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
                     gap={4}
                     alignItems="center"
                 >
-                    <GridItem>
-                        <Button
-                            onClick={() => setRecordType(false)}
-                            opacity={recordType ? '45%' : '100%'}
-                        >
-                            +
-                        </Button>
-                    </GridItem>
+                    {/*<GridItem>*/}
+                    {/*    <Button*/}
+                    {/*        onClick={() => setRecordType(false)}*/}
+                    {/*        opacity={recordType ? '45%' : '100%'}*/}
+                    {/*    >*/}
+                    {/*        +*/}
+                    {/*    </Button>*/}
+                    {/*</GridItem>*/}
                     <GridItem>
                         <Button
                             onClick={() => setRecordType(true)}
@@ -249,9 +256,10 @@ const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
             <Buttons label="Confirm" onClick={handleSubmit} />
             {isEdit && (
                 <DeleteButton
-                    recordId={existingRecord.cashflowRecordId}
+                    recordIds={existingRecord.cashflowRecordId}
                     onDelete={(id) => {
                         console.log(`Record with id ${id} deleted.`);
+                        console.log('refreshEvents in RecordForm:', refreshEvents);
                         refreshEvents();
                         closeModal();
                     }}

@@ -28,7 +28,7 @@ const CalendarGrid = ({ currentMonth, currentYear, isMondayFirst, daysInMonth })
         ...daysFromPrevMonth.map((day) => ({ day, type: "prev" })),
         ...Array.from({ length: daysInMonth }, (_, i) => ({ day: i + 1, type: "current" })),
         ...daysFromNextMonth.map((day) => ({ day, type: "next" })),
-    ].slice(0, 35); // Zapewniamy maksymalnie 35 dni
+    ].slice(0, 35); // maksymalnie 35 dni
 
     const getDateFromCal = (day, type) => {
         if (type === "prev") {

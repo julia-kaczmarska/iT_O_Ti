@@ -20,4 +20,3 @@ const OpenModalButton = ({ modalType, modalProps, label, fitToParent }) => {
 };
 
 export default OpenModalButton;
-

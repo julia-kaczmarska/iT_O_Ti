@@ -3,20 +3,15 @@ import React from "react";
 import CategoryForm from "../Forms/CategoryForm";
 
 import {Box, Grid} from "@chakra-ui/react";
+import BudgetForm from "../Budget/Planning/BudgetForm";
 
 const MODAL_CONFIG = {
-    // 'EditableCategory': {
-    //     label: 'Category settings',
-    //     content: (
-    //         <Box>
-    //             <Grid templateColumns="repeat(2, 1fr)" gap={1}>
-    //                 <ColorPoint />
-    //                 <EditableCategory />
-    //             </Grid>
-    //             <Buttons label="Add category" />
-    //         </Box>
-    //     ),
-    // },
+    'AddBudgetPlan': {
+        label: 'Planning budget',
+        content: (props) => (
+            <BudgetForm date={props.date}/>
+        ),
+    },
     'AddCategory': {
         label: 'Add category',
         content: <CategoryForm isEdit={false} />,

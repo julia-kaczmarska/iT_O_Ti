@@ -6,13 +6,13 @@ import { useModal } from '../../contexts/ModalContext';
 const MyModalManager = () => {
     const { modalType, modalProps = {}, closeModal } = useModal();
     const config = MODAL_CONFIG[modalType];
-
-    // console.log('Rendering MyModalManager:', { modalType, modalProps });
-
     if (!config) return null;
 
+    // Dynamiczna szerokość modala
+    const modalSize = modalType === 'AddBudgetPlan' ? '6xl' : 'md';
+
     return (
-        <Modal isOpen={!!modalType} onClose={closeModal}>
+        <Modal isOpen={!!modalType} onClose={closeModal} size={modalSize}>
             <ModalOverlay bg="rgba(0, 0, 0, 0.6)" />
             <ModalContent>
                 <ModalHeader>{config.label}</ModalHeader>
@@ -24,7 +24,6 @@ const MyModalManager = () => {
                 </ModalBody>
             </ModalContent>
         </Modal>
-
     );
 };
 

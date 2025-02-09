@@ -44,7 +44,10 @@ const Dashboard = ( { }) => {
                 </Box>
                 <Box m={3}>
                     <Text fontSize="2xl" fontWeight="bold" mb={4}>This month budget</Text>
-                    <BudgetLayout  />
+                    <BudgetLayout
+                        currentMonth={currentMonth}
+                        currentYear={currentYear}
+                    />
                 </Box>
             </SimpleGrid>
         </VStack>
