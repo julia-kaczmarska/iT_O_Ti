@@ -72,7 +72,7 @@ const EventsManager = ({ currentDay, currentMonth, currentYear, setRefreshEvents
                 <DayEvent key={index} event={event} refreshEvents={refreshEvents} fetchBudgetData={fetchBudgetData}/>
             ))}
             {dayEvents.events.length > 2 && (
-                <MoreEventsPopover events={dayEvents.events.slice(2)} refreshEvents={refreshEvents}/>
+                <MoreEventsPopover events={dayEvents.events.slice(2)} refreshEvents={refreshEvents} fetchBudgetData={fetchBudgetData}/>
             )}
         </Box>
     );
