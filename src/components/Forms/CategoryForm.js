@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import ChromePicker from '../Categories/ChromePicker';
 import {Box, Text, Button, FormControl, FormLabel, Input, VStack} from "@chakra-ui/react";
 import {useThemeContext} from "../../themes/ThemeContext";
+import {useModal} from "../../contexts/ModalContext";
+import {useCategories} from "../../contexts/CategoriesContext";
 
-const CategoryForm = ({ category }) => {
+const CategoryForm = ({ category, refreshCategories }) => {
+    const {fetchCategories} = useCategories();
+    const {closeModal} = useModal();
     const activeColorTheme = useThemeContext();
     const [title, setTitle] = useState(category ? category.title : '');
     const [color, setColor] = useState(category ? category.color : '#000000');  // Ustaw domyślny kolor jeśli kategoria nie ma koloru
@@ -37,6 +41,8 @@ const CategoryForm = ({ category }) => {
             })
             .then(data => {
                 console.log('Category added:', data);
+                fetchCategories();
+                closeModal();
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);

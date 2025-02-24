@@ -3,13 +3,15 @@ import { Box, Button, VStack, Text } from "@chakra-ui/react";
 import IncomeBudgetForm from "./IncomeBudgetForm";
 import CategoriesBudgetForm from "./CategoriesBudgetForm";
 import PropTypes from "prop-types";
+import {useModal} from "../../../contexts/ModalContext";
 
 CategoriesBudgetForm.propTypes = {
     totalIncome: PropTypes.number,
     onCategoryChange: PropTypes.func,
 };
 
-const BudgetForm = ({ date }) => {
+const BudgetForm = ({ date, refreshBudgetData }) => {
+    const { closeModal } = useModal();
     const [totalIncome, setTotalIncome] = useState(0);
     const [incomes, setIncomes] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -34,6 +36,7 @@ const BudgetForm = ({ date }) => {
 
             // Tworzenie obiektu z danymi do wysyłki
             const budgetData = {
+                firstOfMonth: date,
                 totalIncome,
                 remainingBalance: 0,
                 plannedBudgets: categories,
@@ -100,6 +103,8 @@ const BudgetForm = ({ date }) => {
             }
 
             console.log("Budget and incomes saved successfully.");
+            refreshBudgetData();
+            closeModal();
         } catch (error) {
             console.error("Error saving budget and incomes:", error);
         }

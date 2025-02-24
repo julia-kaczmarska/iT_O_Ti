@@ -13,6 +13,7 @@ const Dashboard = ( { }) => {
     const currentDate = new Date();
     const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth());
     const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
+    const [fetchBudgetData, setFetchBudgetData] = useState(null)
 
     const prevMonth = () => {
         setCurrentMonth((prevMonth) => (prevMonth === 0 ? 11 : prevMonth - 1));
@@ -40,11 +41,13 @@ const Dashboard = ( { }) => {
                     <MyOwnCal
                         currentMonth={currentMonth}
                         currentYear={currentYear}
+                        fetchBudgetData={fetchBudgetData}
                     />
                 </Box>
                 <Box m={3}>
                     <Text fontSize="2xl" fontWeight="bold" mb={4}>This month budget</Text>
                     <BudgetLayout
+                        setFetchBudgetData={setFetchBudgetData}
                         currentMonth={currentMonth}
                         currentYear={currentYear}
                     />

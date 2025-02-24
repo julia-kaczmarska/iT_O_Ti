@@ -16,7 +16,7 @@ import moment from "moment";
 import DeleteButton from "../MyButtons/DeleteButton";
 import {useModal} from "../../contexts/ModalContext";
 
-const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
+const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents, fetchBudgetData }) => {
     const { closeModal } = useModal();
     const { categories } = useCategories();
     const [error, setError] = useState(null);
@@ -81,10 +81,9 @@ const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
 
         const categoryId = presentCategory?.value;
 
-        // Przygotowanie danych w formie listy (nawet jeśli jest to pojedynczy rekord)
         const records = [
             {
-                cashflowRecordId: isEdit ? recordId : null, // Jeśli edytujemy, dodajemy ID
+                cashflowRecordId: isEdit ? recordId : null,
                 amount: parseFloat(amount),
                 startDate: adjustedStartDate,
                 recordType: recordType,
@@ -103,7 +102,7 @@ const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(records), // Wysyłamy listę rekordów
+            body: JSON.stringify(records),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -117,12 +116,12 @@ const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
                 setError("");
                 closeModal();
                 refreshEvents();
+                fetchBudgetData();
             })
             .catch((error) => {
                 console.error('There was a problem with the fetch operation:', error);
             });
     };
-
 
     // Przygotowanie opcji dla react-select
     const categoryOptions = categories.map((category) => ({
@@ -130,7 +129,6 @@ const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
         label: category.title,
         color: category.color,
     }));
-
     // Niestandardowe style dla react-select
     const customStyles = {
         control: (provided, state) => ({
@@ -165,14 +163,6 @@ const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
                     gap={4}
                     alignItems="center"
                 >
-                    {/*<GridItem>*/}
-                    {/*    <Button*/}
-                    {/*        onClick={() => setRecordType(false)}*/}
-                    {/*        opacity={recordType ? '45%' : '100%'}*/}
-                    {/*    >*/}
-                    {/*        +*/}
-                    {/*    </Button>*/}
-                    {/*</GridItem>*/}
                     <GridItem>
                         <Button
                             onClick={() => setRecordType(true)}
@@ -261,6 +251,7 @@ const RecordForm = ({ isEdit, existingRecord, dateFromCal, refreshEvents }) => {
                         console.log(`Record with id ${id} deleted.`);
                         console.log('refreshEvents in RecordForm:', refreshEvents);
                         refreshEvents();
+                        fetchBudgetData();
                         closeModal();
                     }}
                 />

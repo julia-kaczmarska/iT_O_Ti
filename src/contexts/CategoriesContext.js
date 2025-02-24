@@ -8,32 +8,34 @@ export const CategoriesProvider = ({ children }) => {
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const token = localStorage.getItem('jwtToken');
-                const userId = localStorage.getItem('userId');
-                if (!token) {
-                    throw new Error('No token found');
-                }
 
-                const response = await fetch(`http://localhost:8080/user/${userId}/categories`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (!response.ok) throw new Error('Failed to fetch categories');
-
-                const data = await response.json();
-                setCategories(data);
-            } catch (error) {
-                setError(error.message);
-                console.error('Error fetching categories:', error);
+    const fetchCategories = async () => {
+        try {
+            const token = localStorage.getItem('jwtToken');
+            const userId = localStorage.getItem('userId');
+            if (!token) {
+                throw new Error('No token found');
             }
-        };
 
+            const response = await fetch(`http://localhost:8080/user/${userId}/categories`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch categories');
+
+            const data = await response.json();
+            setCategories(data);
+        } catch (error) {
+            setError(error.message);
+            console.error('Error fetching categories:', error);
+        }
+    };
+
+    // Wywołaj `fetchCategories` po załadowaniu komponentu
+    useEffect(() => {
         fetchCategories();
     }, []);
 
@@ -72,7 +74,7 @@ export const CategoriesProvider = ({ children }) => {
 
 
     return (
-        <CategoriesContext.Provider value={{ categories, updateCategory, deleteCategory, error }}>
+        <CategoriesContext.Provider value={{ categories, updateCategory, deleteCategory, error, fetchCategories }}>
             {children}
         </CategoriesContext.Provider>
     );

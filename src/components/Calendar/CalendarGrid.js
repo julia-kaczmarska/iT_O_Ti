@@ -4,9 +4,10 @@ import EventsManager from "./Events/EventsManager";
 import { useThemeContext } from "../../themes/ThemeContext";
 import OpenModalButton from "../MyButtons/OpenModalButton";
 
-const CalendarGrid = ({ currentMonth, currentYear, isMondayFirst, daysInMonth }) => {
+const CalendarGrid = ({ currentMonth, currentYear, isMondayFirst, daysInMonth, fetchBudgetData }) => {
     const { activeColorTheme } = useThemeContext();
     const [hoveredIndex, setHoveredIndex] = useState(null);
+    const [refreshEvents, setRefreshEvents] = useState(null);
 
     const currentDate = new Date();
 
@@ -47,7 +48,7 @@ const CalendarGrid = ({ currentMonth, currentYear, isMondayFirst, daysInMonth })
                     h="115px"
                     borderRadius="md"
                     textAlign="center"
-                    boxShadow="sm"
+                    boxShadow="lg"
                     bg={
                         type === "current" &&
                         day === currentDate.getDate() &&
@@ -84,7 +85,11 @@ const CalendarGrid = ({ currentMonth, currentYear, isMondayFirst, daysInMonth })
                             <OpenModalButton
                                 label="+"
                                 modalType="AddRecord"
-                                modalProps={{ dateFromCal: getDateFromCal(day, type) }}
+                                modalProps={{
+                                    dateFromCal: getDateFromCal(day, type),
+                                    refreshEvents: refreshEvents,
+                                    fetchBudgetData: fetchBudgetData
+                                }}
                                 fitToParent={true}
                             />
                         ) : (
@@ -97,6 +102,8 @@ const CalendarGrid = ({ currentMonth, currentYear, isMondayFirst, daysInMonth })
                                 currentDay={day}
                                 currentMonth={currentMonth}
                                 currentYear={currentYear}
+                                setRefreshEvents={setRefreshEvents}
+                                fetchBudgetData={fetchBudgetData}
                             />
                         )}
                     </Box>

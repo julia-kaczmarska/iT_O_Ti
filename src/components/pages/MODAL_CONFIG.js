@@ -9,7 +9,10 @@ const MODAL_CONFIG = {
     'AddBudgetPlan': {
         label: 'Planning budget',
         content: (props) => (
-            <BudgetForm date={props.date}/>
+            <BudgetForm
+                date={props.date}
+                refreshBudgetData={props.refreshBudgetData}
+            />
         ),
     },
     'AddCategory': {
@@ -21,7 +24,11 @@ const MODAL_CONFIG = {
         content: (props) => (
             <RecordForm
                 isEdit={false}
-                dateFromCal={props.dateFromCal}/>
+                dateFromCal={props.dateFromCal}
+                existingRecord={props.existingRecord}
+                refreshEvents={props.refreshEvents}
+                fetchBudgetData={props.fetchBudgetData}
+            />
         ),
     },
     'EditRecord': {
@@ -31,6 +38,7 @@ const MODAL_CONFIG = {
                 isEdit={true}
                 refreshEvents={props.refreshEvents}
                 existingRecord={props.existingRecord}
+                fetchBudgetData={props.fetchBudgetData}
             />
         ),
     },

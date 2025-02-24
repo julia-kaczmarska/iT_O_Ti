@@ -8,7 +8,7 @@ const OpenModalButton = ({ modalType, modalProps, label, fitToParent }) => {
     const { openModal } = useModal();
 
     return (
-        <Box w="100%" h="100%"> {/* Zapewnia pełne dopasowanie do rodzica */}
+        <Box w="100%" h="100%">
             <Buttons
                 onClick={() => openModal(modalType, modalProps)}
                 label={label}

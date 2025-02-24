@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useThemeContext } from "../../themes/ThemeContext";
 import CalendarGrid from "./CalendarGrid";
 
-const MyOwnCal = ({ currentMonth, currentYear }) => {
+const MyOwnCal = ({ currentMonth, currentYear, fetchBudgetData }) => {
     const { activeColorTheme } = useThemeContext();
     const weekDaysDefault = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -20,7 +20,7 @@ const MyOwnCal = ({ currentMonth, currentYear }) => {
     };
 
     return (
-        <Box w="100%" maxW="800px" mx="auto" p={4} bg="gray.50" borderRadius="lg">
+        <Box w="100%" maxW="800px" mx="auto" p={4} borderRadius="lg">
             <Button
                 onClick={toggleWeekStart}
                 bg={activeColorTheme.colors[4]}
@@ -37,7 +37,7 @@ const MyOwnCal = ({ currentMonth, currentYear }) => {
                     </Text>
                 ))}
             </Grid>
-            <CalendarGrid currentMonth={currentMonth} currentYear={currentYear} isMondayFirst={isMondayFirst} daysInMonth={daysInMonth}/>
+            <CalendarGrid currentMonth={currentMonth} currentYear={currentYear} isMondayFirst={isMondayFirst} daysInMonth={daysInMonth} fetchBudgetData={fetchBudgetData}/>
 
         </Box>
     );
